@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" class="bg-gray-50 dark:bg-gray-900">
 <head>
-    <meta charset="UTF-8">
+<!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-QDl2e_cQKFdNIspNKaFop.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
+    <meta charset="UTF--8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Windows Troubleshooting Cheatsheet</title>
     <!-- Tailwind CSS loaded from CDN -->
@@ -81,12 +87,12 @@
                     </div>
                     <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
                         <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd4">netstat -an</code>
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd4">netstat -ano</code>
                             <button class="copy-btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd4', this)">
                                 <i class="fas fa-copy mr-1"></i> Copy
                             </button>
                         </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Shows active network connections and listening ports. Useful for finding unusual connections.</p>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Shows active connections, listening ports, and the owning Process ID (PID).</p>
                     </div>
                     <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
                         <div class="flex justify-between items-center">
@@ -105,6 +111,15 @@
                             </button>
                         </div>
                         <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Releases and renews the IP address from the DHCP server. Good for connection issues.</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_ncpa">ncpa.cpl</code>
+                            <button class="copy-btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_ncpa', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens the Network Connections panel to manage network adapters.</p>
                     </div>
                 </div>
             </div>
@@ -160,6 +175,33 @@
                         </div>
                         <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Restarts the PC into the Advanced Startup Options menu for Safe Mode, System Restore, etc.</p>
                     </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_mrt">mrt</code>
+                            <button class="copy-btn bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_mrt', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens the Malicious Software Removal Tool to scan for and remove specific, prevalent malware.</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_verifier">verifier</code>
+                            <button class="copy-btn bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_verifier', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens Driver Verifier Manager to stress-test drivers for instability. (Advanced users only).</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_relmon">perfmon /rel</code>
+                            <button class="copy-btn bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_relmon', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens the Reliability Monitor to view a history of system stability and application crashes.</p>
+                    </div>
                 </div>
             </div>
 
@@ -196,6 +238,33 @@
                         </div>
                         <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">DirectX Diagnostic Tool. Gathers information about DirectX components and drivers for multimedia troubleshooting.</p>
                     </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_driverquery">driverquery</code>
+                            <button class="copy-btn bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_driverquery', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Displays a list of all installed device drivers and their properties.</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_sysdm">sysdm.cpl</code>
+                            <button class="copy-btn bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_sysdm', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens System Properties to manage computer name, performance settings, and restore points.</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_gpresult">gpresult /r</code>
+                            <button class="copy-btn bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_gpresult', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Displays the Resultant Set of Policy (RSoP) for the logged-in user and computer.</p>
+                    </div>
                 </div>
             </div>
 
@@ -205,6 +274,15 @@
                     <i class="fas fa-cogs mr-2"></i>Process & Service Management
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_taskmgr">taskmgr</code>
+                            <button class="copy-btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_taskmgr', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens the Task Manager to view running processes, performance, and startup apps.</p>
+                    </div>
                     <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
                         <div class="flex justify-between items-center">
                             <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd12">tasklist</code>
@@ -234,12 +312,12 @@
                     </div>
                     <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
                         <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd1g">gpupdate /force</code>
-                            <button class="copy-btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd1g', this)">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_taskschd">taskschd.msc</code>
+                            <button class="copy-btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_taskschd', this)">
                                 <i class="fas fa-copy mr-1"></i> Copy
                             </button>
                         </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Forces an immediate update and reapplication of all Group Policy settings.</p>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens the Task Scheduler to view and manage automated tasks.</p>
                     </div>
                     <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
                         <div class="flex justify-between items-center">
@@ -248,16 +326,34 @@
                                 <i class="fas fa-copy mr-1"></i> Copy
                             </button>
                         </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400"><strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Lists the top 10 processes by CPU usage. (Run in PowerShell, not CMD).</p>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400"><strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Lists the top 10 processes by CPU usage.</p>
                     </div>
                     <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
                         <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 powershell-code dark:text-blue-300 p-2 rounded" id="cmd_ps_services">Get-Service | ? { $_.Status -eq "Running" }</code>
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 powershell-code dark:text-blue-300 p-2 rounded" id="cmd_ps_stopproc">Stop-Process -Name "notepad"</code>
+                            <button class="copy-btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_ps_stopproc', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400"><strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Stops a process by its name (e.g., "notepad").</p>
+                    </div>
+                     <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 powershell-code dark:text-blue-300 p-2 rounded" id="cmd_ps_services">Get-Service</code>
                             <button class="copy-btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_ps_services', this)">
                                 <i class="fas fa-copy mr-1"></i> Copy
                             </button>
                         </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400"><strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Lists all currently running services. (Run in PowerShell, not CMD).</p>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400"><strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Lists all services on the system and their status.</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 powershell-code dark:text-blue-300 p-2 rounded" id="cmd_ps_startsvc">Start-Service "Spooler"</code>
+                            <button class="copy-btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_ps_startsvc', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400"><strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Starts a service by name (e.g., the "Spooler" print service).</p>
                     </div>
                 </div>
             </div>
@@ -304,6 +400,24 @@
                         </div>
                         <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens the Drive Optimizer to defragment HDDs or optimize (TRIM) SSDs.</p>
                     </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_robocopy">robocopy</code>
+                            <button class="copy-btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_robocopy', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Robust File Copy. A powerful tool for copying files and directories. (e.g., `robocopy C:\src D:\dest /E`)</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 powershell-code dark:text-blue-300 p-2 rounded" id="cmd_ps_diskhealth">Get-PhysicalDisk | ? {$_.HealthStatus -ne 'Healthy'}</code>
+                            <button class="copy-btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_ps_diskhealth', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400"><strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Checks all physical disks and lists any that are not 'Healthy'.</p>
+                    </div>
                 </div>
             </div>
 
@@ -324,12 +438,30 @@
                     </div>
                     <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
                         <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_compmgmt">compmgmt.msc</code>
+                            <button class="copy-btn bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_compmgmt', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens Computer Management, a console with many tools (Event Viewer, Disks, Services, etc.).</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_devmgmt">devmgmt.msc</code>
+                            <button class="copy-btn bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_devmgmt', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens the Device Manager to view and manage hardware and drivers.</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
                             <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_msconfig">msconfig</code>
                             <button class="copy-btn bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_msconfig', this)">
                                 <i class="fas fa-copy mr-1"></i> Copy
                             </button>
                         </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens System Configuration to manage boot options, services, and startup programs (pre-Win10).</p>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens System Configuration to manage boot options, services, and startup programs.</p>
                     </div>
                      <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
                         <div class="flex justify-between items-center">
@@ -367,6 +499,213 @@
                         </div>
                         <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens the Remote Desktop Connection client.</p>
                     </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_inetcpl">inetcpl.cpl</code>
+                            <button class="copy-btn bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_inetcpl', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens Internet Properties to manage cache, security, and proxy settings.</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_powercfg">powercfg.cpl</code>
+                            <button class="copy-btn bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_powercfg', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens Power Options to manage power plans and sleep settings.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security & Administrative Tools -->
+            <div>
+                <h2 class="text-2xl font-semibold border-b-2 border-teal-500 pb-2 mb-4 text-gray-900 dark:text-white">
+                    <i class="fas fa-shield-alt mr-2"></i>Security & Administrative Tools
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_gpedit">gpedit.msc</code>
+                            <button class="copy-btn bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_gpedit', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens the Local Group Policy Editor (Not in Windows Home edition).</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_regedit">regedit</code>
+                            <button class="copy-btn bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_regedit', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens the Registry Editor. (Use with caution).</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_secpol">secpol.msc</code>
+                            <button class="copy-btn bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_secpol', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens the Local Security Policy editor (Not in Windows Home edition).</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_netplwiz">netplwiz</code>
+                            <button class="copy-btn bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_netplwiz', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens the advanced User Accounts control panel (also `control userpasswords2`).</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_lusrmgr">lusrmgr.msc</code>
+                            <button class="copy-btn bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_lusrmgr', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens Local Users and Groups manager (Not in Windows Home edition).</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_certmgr">certmgr.msc</code>
+                            <button class="copy-btn bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_certmgr', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens the Certificate Manager for the current user.</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_printmgmt">printmanagement.msc</code>
+                            <button class="copy-btn bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_printmgmt', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens the Print Management console to manage printers and print servers.</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_1g">gpupdate /force</code>
+                            <button class="copy-btn bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_1g', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Forces an immediate update and reapplication of all Group Policy settings.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PowerShell Specific -->
+            <div>
+                <h2 class="text-2xl font-semibold border-b-2 border-cyan-500 pb-2 mb-4 text-gray-900 dark:text-white">
+                    <i class="fas fa-terminal mr-2"></i>PowerShell Specific
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 powershell-code dark:text-blue-300 p-2 rounded" id="cmd_ps_gethelp">Get-Help Get-Process</code>
+                            <button class="copy-btn bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_ps_gethelp', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400"><strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Shows detailed help for any cmdlet (command).</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 powershell-code dark:text-blue-300 p-2 rounded" id="cmd_ps_updatehelp">Update-Help</code>
+                            <button class="copy-btn bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_ps_updatehelp', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400"><strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Downloads the latest help files for PowerShell cmdlets. (Run as Admin).</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 powershell-code dark:text-blue-300 p-2 rounded" id="cmd_ps_getcmd">Get-Command</code>
+                            <button class="copy-btn bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_ps_getcmd', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400"><strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Lists all available commands, cmdlets, and functions.</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 powershell-code dark:text-blue-300 p-2 rounded" id="cmd_ps_measure">Measure-Command { Get-Process }</code>
+                            <button class="copy-btn bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_ps_measure', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400"><strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Measures how long a command or script block takes to execute.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accessibility & Misc Tools -->
+            <div>
+                <h2 class="text-2xl font-semibold border-b-2 border-orange-500 pb-2 mb-4 text-gray-900 dark:text-white">
+                    <i class="fas fa-toolbox mr-2"></i>Accessibility & Misc. Tools
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_snippingtool">snippingtool</code>
+                            <button class="copy-btn bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_snippingtool', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens the Snipping Tool (or Snip & Sketch) for taking screenshots.</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_charmap">charmap</code>
+                            <button class="copy-btn bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_charmap', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens the Character Map to find and copy special characters.</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_magnify">magnify</code>
+                            <button class="copy-btn bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_magnify', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Toggles the Magnifier accessibility tool.</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_osk">osk</code>
+                            <button class="copy-btn bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_osk', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens the On-Screen Keyboard.</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_sndvol">sndvol</code>
+                            <button class="copy-btn bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_sndvol', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens the Volume Mixer to control audio levels for different applications.</p>
+                    </div>
+                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <div class="flex justify-between items-center">
+                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_timedate">timedate.cpl</code>
+                            <button class="copy-btn bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_timedate', this)">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Opens the Date and Time settings panel.</p>
+                    </div>
                 </div>
             </div>
 
@@ -374,7 +713,7 @@
 
         <footer class="text-center mt-10 pt-4 border-t border-gray-200 dark:border-gray-700">
             <p class="text-sm text-gray-500 dark:text-gray-400">Use these commands in Command Prompt or PowerShell, preferably as an Administrator.</p>
-            <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Commands marked <strong class="text-blue-600 dark:text-blue-300">PowerShell</strong> must be run in a PowerShell window.</p>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Commands marked <strong class="text-blue-600 dark:text-blue-300">PowerShell</strong> must be run in a PowerShell window. Commands ending in <strong class="text-pink-600 dark:text-pink-400">.msc</strong> or <strong class="text-pink-600 dark:text-pink-400">.cpl</strong> open GUI windows.</p>
         </footer>
 
     </div>
@@ -399,17 +738,17 @@
 
                 // --- Visual Feedback ---
                 // Store original button color classes
-                const originalClasses = Array.from(buttonElement.classList).filter(cls => cls.startsWith('bg-'));
+                const originalClasses = Array.from(buttonElement.classList).filter(cls => cls.startsWith('bg-') || cls.startsWith('hover:bg-'));
                 
                 // Change button to "Copied!" state
                 buttonElement.innerHTML = '<i class="fas fa-check mr-1"></i> Copied!';
                 buttonElement.classList.remove(...originalClasses);
-                buttonElement.classList.add('bg-teal-500', 'hover:bg-teal-600');
+                buttonElement.classList.add('bg-green-500', 'hover:bg-green-600'); // Use a consistent 'copied' color
                 
                 // Revert button back to "Copy" state after 2 seconds
                 setTimeout(() => {
                     buttonElement.innerHTML = '<i class="fas fa-copy mr-1"></i> Copy';
-                    buttonElement.classList.remove('bg-teal-500', 'hover:bg-teal-600');
+                    buttonElement.classList.remove('bg-green-500', 'hover:bg-green-600');
                     buttonElement.classList.add(...originalClasses);
                 }, 2000);
 
@@ -417,8 +756,12 @@
                 console.error('Failed to copy text: ', err);
                 // Handle failure
                 buttonElement.innerHTML = '<i class="fas fa-times mr-1"></i> Failed';
+                // Store original button color classes
+                const originalClasses = Array.from(buttonElement.classList).filter(cls => cls.startsWith('bg-') || cls.startsWith('hover:bg-'));
                 setTimeout(() => {
                     buttonElement.innerHTML = '<i class="fas fa-copy mr-1"></i> Copy';
+                    buttonElement.classList.remove('bg-green-500', 'hover:bg-green-600'); // Failsafe remove
+                    buttonElement.classList.add(...originalClasses);
                 }, 2000);
             }
         }
@@ -441,4 +784,3 @@
     </script>
 </body>
 </html>
-
