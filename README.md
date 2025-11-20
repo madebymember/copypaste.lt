@@ -2,7 +2,7 @@
 
 A simple, clean, single-page cheatsheet of common and useful Windows troubleshooting commands, tools, and shortcuts. Designed as a quick reference for IT professionals and power users.
 
-[**View Live Demo**](https://www.google.com/search?q=https://your-username.github.io/windows-cheatsheet/)
+[**View Live Demo**](https://copypaste.lt/)
 
 ## **Features**
 
@@ -58,4 +58,4 @@ You can host this site for free in just a few minutes.
 
 ## **License**
 
-This project is open source and available under the [MIT License](https://www.google.com/search?q=LICENSE).
+This project is open source and available under the [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).
