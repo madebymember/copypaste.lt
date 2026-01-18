@@ -1,1082 +1,354 @@
 <!DOCTYPE html>
-<html lang="lt" class="bg-gray-50 dark:bg-gray-900">
+<html lang="lt" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Puslapio pavadinimas bus nustatytas JavaScript -->
-    <title data-translate-key="pageTitle">Windows Problemų Sprendimo Vadovas</title>
-    <!-- Tailwind CSS loaded from CDN -->
+    <title>Windows Troubleshooting Cheatsheet</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Font: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Plausible Analytics Script -->
-    <script async src="https://plausible.io/js/pa-QDl2e_cQKFdNIspNKaFop.js"></script>
     <script>
-      window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-      plausible.init()
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        win: {
+                            blue: '#0078D7',
+                            dark: '#1f1f1f',
+                            darker: '#121212',
+                            light: '#f3f4f6'
+                        }
+                    }
+                }
+            }
+        }
     </script>
-    
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
+        .cmd-font { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; }
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 4px;
+            padding: 16px;
+            position: fixed;
+            z-index: 50;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
         }
-        .command-card {
-            transition: all 0.2s ease-in-out;
-        }
-        .command-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-        .copy-btn {
-            transition: all 0.2s ease-in-out;
-        }
-        .copy-btn:active {
-            transform: scale(0.95);
-        }
-        .lang-btn {
-            transition: all 0.2s ease-in-out;
-        }
-        .lang-btn:active {
-            transform: scale(0.95);
-        }
-        .powershell-code {
-            color: #01579B; /* Dark blue for PowerShell */
-            dark:text-blue-300;
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
         }
     </style>
 </head>
-<body class="text-gray-800 dark:text-gray-200">
-    
-    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-4xl relative">
+<body class="bg-gray-50 text-gray-800 dark:bg-win-darker dark:text-gray-200 transition-colors duration-200">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-40 bg-white dark:bg-win-dark shadow-md transition-colors duration-200 border-b border-gray-200 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-3">
+                    <i class="fa-brands fa-windows text-3xl text-win-blue"></i>
+                    <h1 class="font-bold text-xl tracking-tight hidden sm:block" data-i18n="title">Windows Cheatsheet</h1>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <!-- Search -->
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" id="searchInput" class="bg-gray-100 dark:bg-gray-800 text-sm rounded-full pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-win-blue w-32 sm:w-64 transition-all" placeholder="Search / Ieškoti...">
+                    </div>
+
+                    <!-- Language Toggle -->
+                    <button id="langToggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-bold text-sm w-10 h-10 flex items-center justify-center border border-gray-300 dark:border-gray-600">
+                        LT
+                    </button>
+
+                    <!-- Dark Mode Toggle -->
+                    <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-yellow-500 dark:text-gray-400 transition-colors w-10 h-10 flex items-center justify-center">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                    
+                     <!-- Buy Me a Coffee -->
+                    <a href="https://www.buymeacoffee.com/yourusername" target="_blank" class="hidden md:flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-3 py-1.5 rounded-full text-xs font-bold transition-colors shadow-sm">
+                        <i class="fas fa-coffee"></i> <span data-i18n="coffee">Buy Coffee</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        <!-- Kalbos perjungiklis -->
-        <div class="absolute top-4 right-4 sm:top-6 sm:right-6 md:top-8 md:right-8">
-            <button id="lang-toggle-btn" class="lang-btn bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-bold py-2 px-4 rounded-md text-sm hover:bg-gray-300 dark:hover:bg-gray-600">
-                EN
-            </button>
+        <!-- Intro -->
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-extrabold mb-3" data-i18n="hero_title">IT Administratoriaus Įrankinė</h2>
+            <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto" data-i18n="hero_desc">Greita prieiga prie svarbiausių Windows komandų diagnostikai, tinklui ir sistemos valdymui.</p>
         </div>
 
-        <header class="text-center mb-8">
-            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white" data-translate-key="headerTitle">Windows Problemų Sprendimo Vadovas</h1>
-            <p class="mt-2 text-base sm:text-lg text-gray-600 dark:text-gray-400" data-translate-key="headerSubtitle">Rinkinys integruotų įrankių ir komandų, skirtų Windows problemoms diagnozuoti ir spręsti.</p>
-        </header>
+        <!-- Filters -->
+        <div class="flex flex-wrap justify-center gap-2 mb-8" id="categoryFilters">
+            <button class="filter-btn active px-4 py-1.5 rounded-full text-sm font-medium bg-win-blue text-white shadow-sm transition-all" data-category="all" data-i18n="cat_all">Visi</button>
+            <button class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 transition-all" data-category="network" data-i18n="cat_net">Tinklas</button>
+            <button class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 transition-all" data-category="system" data-i18n="cat_sys">Sistema</button>
+            <button class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 transition-all" data-category="disk" data-i18n="cat_disk">Diskas</button>
+            <button class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 transition-all" data-category="shell" data-i18n="cat_shell">Shell & Run</button>
+        </div>
 
-        <main class="space-y-10">
+        <!-- Grid -->
+        <div id="cardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Cards will be injected here via JS -->
+        </div>
 
-            <!-- Tinklo Diagnostika -->
-            <div>
-                <h2 class="text-2xl font-semibold border-b-2 border-blue-500 pb-2 mb-4 text-gray-900 dark:text-white" data-translate-key="categoryNetworking">
-                    <i class="fas fa-network-wired mr-2"></i>Tinklo Diagnostika
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- ipconfig /all -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd1">ipconfig /all</code>
-                            <button class="copy-btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd1', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmd1Desc">Rodo pilną TCP/IP konfigūraciją visiems adapteriams, įskaitant MAC adresą ir DHCP informaciją.</p>
-                    </div>
-                    <!-- ping -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd2">ping 8.8.8.8</code>
-                            <button class="copy-btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd2', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmd2Desc">Testuoja ryšį su konkrečiu IP adresu ar domenu, tikrina paketų praradimą.</p>
-                    </div>
-                    <!-- tracert -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd3">tracert google.com</code>
-                            <button class="copy-btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd3', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmd3Desc">Atseka paketų maršrutą iki tikslo, identifikuoja tinklo šuolius ir vėlavimus.</p>
-                    </div>
-                    <!-- netstat -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd4">netstat -ano</code>
-                            <button class="copy-btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd4', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmd4Desc">Rodo aktyvius tinklo ryšius, klausomus prievadus ir susijusio proceso ID (PID).</p>
-                    </div>
-                    <!-- ipconfig /flushdns -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_flushdns">ipconfig /flushdns</code>
-                            <button class="copy-btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_flushdns', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdFlushdnsDesc">Išvalo vietinę DNS spartinančiąją atmintinę. Naudokite, jei svetainės nerodomos teisingai.</p>
-                    </div>
-                    <!-- ipconfig /renew -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_renewdns">ipconfig /renew</code>
-                            <button class="copy-btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_renewdns', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdRenewdnsDesc">Atnaujina IP adresą iš DHCP serverio. Naudinga esant ryšio problemoms.</p>
-                    </div>
-                    <!-- ncpa.cpl -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_ncpa">ncpa.cpl</code>
-                            <button class="copy-btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_ncpa', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdNcpaDesc">Atidaro tinklo jungčių skydelį tinklo adapterių valdymui.</p>
-                    </div>
-                </div>
-            </div>
+        <!-- No Results -->
+        <div id="noResults" class="hidden text-center py-12">
+            <div class="text-6xl mb-4">😕</div>
+            <h3 class="text-xl font-bold" data-i18n="no_results">Nerasta komandų</h3>
+            <p class="text-gray-500" data-i18n="try_search">Pabandykite kitą raktažodį.</p>
+        </div>
 
-            <!-- Sistemos Failai ir Būsena -->
-            <div>
-                <h2 class="text-2xl font-semibold border-b-2 border-green-500 pb-2 mb-4 text-gray-900 dark:text-white" data-translate-key="categorySystemHealth">
-                    <i class="fas fa-heartbeat mr-2"></i>Sistemos Failai ir Būsena
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- sfc /scannow -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd5">sfc /scannow</code>
-                            <button class="copy-btn bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd5', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmd5Desc">Sistemos failų tikrintuvas. Skenuoja ir taiso sugadintus ar trūkstamus apsaugotus Windows sistemos failus.</p>
-                    </div>
-                    <!-- DISM -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd6">DISM /Online /Cleanup-Image /RestoreHealth</code>
-                            <button class="copy-btn bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd6', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmd6Desc">Taiso Windows komponentų saugyklą, kuria remiasi `sfc`. Vykdykite, jei `sfc` nepavyksta.</p>
-                    </div>
-                    <!-- chkdsk -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd7">chkdsk /f /r C:</code>
-                            <button class="copy-btn bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd7', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmd7Desc">Tikrina diską ieškant failų sistemos klaidų (/f) ir blogų sektorių, kad atkurtų duomenis (/r).</p>
-                    </div>
-                    <!-- resmon -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd8">resmon</code>
-                            <button class="copy-btn bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd8', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmd8Desc">Atidaro Išteklių monitorių, rodantį išsamų realaus laiko CPU, atminties, disko ir tinklo naudojimą.</p>
-                    </div>
-                    <!-- Advanced Startup -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_advstartup">shutdown /r /o /t 0</code>
-                            <button class="copy-btn bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_advstartup', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdAdvstartupDesc">Perkrauna kompiuterį į Išplėstinės paleisties parinkčių meniu (Saugi veiksena, Sistemos atkūrimas ir kt.).</p>
-                    </div>
-                    <!-- mrt -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_mrt">mrt</code>
-                            <button class="copy-btn bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_mrt', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdMrtDesc">Atidaro Kenkėjiškų programų šalinimo įrankį, skirtą skenuoti ir pašalinti specifines, paplitusias kenkėjiškas programas.</p>
-                    </div>
-                    <!-- verifier -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_verifier">verifier</code>
-                            <button class="copy-btn bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_verifier', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdVerifierDesc">Atidaro Tvarkyklės tikrintuvo tvarkytuvę, skirtą testuoti tvarkykles dėl nestabilumo. (Tik pažengusiems).</p>
-                    </div>
-                    <!-- reliability monitor -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_relmon">perfmon /rel</code>
-                            <button class="copy-btn bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_relmon', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdRelmonDesc">Atidaro Patikimumo monitorių, rodantį sistemos stabilumo ir programų strigimų istoriją.</p>
-                    </div>
-                </div>
-            </div>
+    </main>
 
-            <!-- Sistemos Informacija -->
-            <div>
-                <h2 class="text-2xl font-semibold border-b-2 border-purple-500 pb-2 mb-4 text-gray-900 dark:text-white" data-translate-key="categorySystemInfo">
-                    <i class="fas fa-info-circle mr-2"></i>Sistemos Informacija
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- systeminfo -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd9">systeminfo</code>
-                            <button class="copy-btn bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd9', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmd9Desc">Rodo išsamią kompiuterio aparatinės ir programinės įrangos konfigūracijos suvestinę.</p>
-                    </div>
-                    <!-- msinfo32 -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd10">msinfo32</code>
-                            <button class="copy-btn bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd10', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmd10Desc">Atidaro Sistemos informacijos GUI – išsamų įrankį aparatūrai, komponentams ir programinei įrangai peržiūrėti.</p>
-                    </div>
-                    <!-- dxdiag -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd11">dxdiag</code>
-                            <button class="copy-btn bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd11', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmd11Desc">DirectX diagnostikos įrankis. Renka informaciją apie DirectX komponentus ir tvarkykles multimedijos problemoms spręsti.</p>
-                    </div>
-                    <!-- driverquery -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_driverquery">driverquery</code>
-                            <button class="copy-btn bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_driverquery', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdDriverqueryDesc">Rodo visų įdiegtų įrenginių tvarkyklių ir jų ypatybių sąrašą.</p>
-                    </div>
-                    <!-- sysdm.cpl -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_sysdm">sysdm.cpl</code>
-                            <button class="copy-btn bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_sysdm', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdSysdmDesc">Atidaro Sistemos ypatybes, skirtas valdyti kompiuterio pavadinimą, našumo nustatymus ir atkūrimo taškus.</p>
-                    </div>
-                    <!-- gpresult -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_gpresult">gpresult /r</code>
-                            <button class="copy-btn bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_gpresult', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdGpresultDesc">Rodo pritaikytų grupės strategijų rinkinį (RSoP) prisijungusiam vartotojui ir kompiuteriui.</p>
-                    </div>
-                </div>
-            </div>
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-win-dark border-t border-gray-200 dark:border-gray-700 mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-500 dark:text-gray-400 text-sm">
+            <p>&copy; 2023 Windows Cheatsheet. Open Source Project.</p>
+        </div>
+    </footer>
 
-            <!-- Procesų ir Paslaugų Valdymas -->
-            <div>
-                <h2 class="text-2xl font-semibold border-b-2 border-yellow-500 pb-2 mb-4 text-gray-900 dark:text-white" data-translate-key="categoryProcess">
-                    <i class="fas fa-cogs mr-2"></i>Procesų ir Paslaugų Valdymas
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- taskmgr -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_taskmgr">taskmgr</code>
-                            <button class="copy-btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_taskmgr', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdTaskmgrDesc">Atidaro Užduočių tvarkytuvę, skirtą peržiūrėti vykdomus procesus, našumą ir paleisties programas.</p>
-                    </div>
-                    <!-- tasklist -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd12">tasklist</code>
-                            <button class="copy-btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd12', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmd12Desc">Rodo visų šiuo metu vykdomų procesų sąrašą vietiniame ar nuotoliniame kompiuteryje.</p>
-                    </div>
-                    <!-- taskkill -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd13">taskkill /F /PID 1234</code>
-                            <button class="copy-btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd13', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmd13Desc">Priverstinai nutraukia procesą pagal jo Proceso ID (PID). Naudokite `tasklist`, kad rastumėte PID.</p>
-                    </div>
-                    <!-- services.msc -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd14">services.msc</code>
-                            <button class="copy-btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd14', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmd14Desc">Atidaro Paslaugų valdymo konsolę, skirtą Windows paslaugoms paleisti, sustabdyti ir konfigūruoti.</p>
-                    </div>
-                    <!-- taskschd.msc -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_taskschd">taskschd.msc</code>
-                            <button class="copy-btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_taskschd', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdTaskschdDesc">Atidaro Užduočių planuoklę, skirtą peržiūrėti ir valdyti automatizuotas užduotis.</p>
-                    </div>
-                    <!-- Get-Process -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 powershell-code dark:text-blue-300 p-2 rounded" id="cmd_ps_cpu">Get-Process | Sort CPU -Desc | Select -First 10</code>
-                            <button class="copy-btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_ps_cpu', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdPsCpuDesc"><strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Rodo 10 daugiausiai CPU naudojančių procesų.</p>
-                    </div>
-                    <!-- Stop-Process -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 powershell-code dark:text-blue-300 p-2 rounded" id="cmd_ps_stopproc">Stop-Process -Name "notepad"</code>
-                            <button class="copy-btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_ps_stopproc', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdPsStopprocDesc"><strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Sustabdo procesą pagal jo pavadinimą (pvz., „notepad“).</p>
-                    </div>
-                    <!-- Get-Service -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 powershell-code dark:text-blue-300 p-2 rounded" id="cmd_ps_services">Get-Service</code>
-                            <button class="copy-btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_ps_services', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdPsServicesDesc"><strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Rodo visas sistemos paslaugas ir jų būseną.</p>
-                    </div>
-                    <!-- Start-Service -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 powershell-code dark:text-blue-300 p-2 rounded" id="cmd_ps_startsvc">Start-Service "Spooler"</code>
-                            <button class="copy-btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_ps_startsvc', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdPsStartsvcDesc"><strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Paleidžia paslaugą pagal pavadinimą (pvz., spausdinimo „Spooler“ paslaugą).</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Disko ir Saugyklos Valdymas -->
-            <div>
-                <h2 class="text-2xl font-semibold border-b-2 border-red-500 pb-2 mb-4 text-gray-900 dark:text-white" data-translate-key="categoryDisk">
-                    <i class="fas fa-hdd mr-2"></i>Disko ir Saugyklos Valdymas
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- diskmgmt.msc -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_diskmgmt">diskmgmt.msc</code>
-                            <button class="copy-btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_diskmgmt', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdDiskmgmtDesc">Atidaro Diskų valdymo GUI, skirtą valdyti skaidinius, formatuoti diskus ir priskirti diskų raides.</p>
-                    </div>
-                    <!-- diskpart -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_diskpart">diskpart</code>
-                            <button class="copy-btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_diskpart', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdDiskpartDesc">Atidaro komandinės eilutės diskų skaidymo įrankį. (Tik pažengusiems).</p>
-                    </div>
-                    <!-- cleanmgr -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_cleanmgr">cleanmgr</code>
-                            <button class="copy-btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_cleanmgr', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdCleanmgrDesc">Atidaro Disko valymo įrankį, skirtą atlaisvinti vietos pašalinant laikinus failus.</p>
-                    </div>
-                    <!-- dfrgui -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_dfrgui">dfrgui</code>
-                            <button class="copy-btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_dfrgui', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdDfrguiDesc">Atidaro Diskų optimizavimo įrankį, skirtą defragmentuoti HDD arba optimizuoti (TRIM) SSD.</p>
-                    </div>
-                    <!-- robocopy -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_robocopy">robocopy</code>
-                            <button class="copy-btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_robocopy', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdRobocopyDesc">Patikimas failų kopijavimas. Galingas įrankis failams ir katalogams kopijuoti. (pvz., `robocopy C:\src D:\dest /E`)</p>
-                    </div>
-                    <!-- Get-PhysicalDisk -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 powershell-code dark:text-blue-300 p-2 rounded" id="cmd_ps_diskhealth">Get-PhysicalDisk | ? {$_.HealthStatus -ne 'Healthy'}</code>
-                            <button class="copy-btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_ps_diskhealth', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdPsDiskhealthDesc"><strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Tikrina visus fizinius diskus ir parodo tuos, kurių būsena nėra „Healthy“ (Sveikas).</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Naudingi Įrankiai ir Valdikliai -->
-            <div>
-                <h2 class="text-2xl font-semibold border-b-2 border-indigo-500 pb-2 mb-4 text-gray-900 dark:text-white" data-translate-key="categoryUtilities">
-                    <i class="fas fa-star mr-2"></i>Naudingi Įrankiai ir Valdikliai
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- eventvwr.msc -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_eventvwr">eventvwr.msc</code>
-                            <button class="copy-btn bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_eventvwr', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdEventvwrDesc">Atidaro Įvykių žurnalą, rodantį sistemos ir programų klaidų bei įvykių žurnalą.</p>
-                    </div>
-                    <!-- compmgmt.msc -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_compmgmt">compmgmt.msc</code>
-                            <button class="copy-btn bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_compmgmt', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdCompmgmtDesc">Atidaro Kompiuterio valdymą – konsolę su daugeliu įrankių (Įvykių žurnalas, Diskai, Paslaugos ir kt.).</p>
-                    </div>
-                    <!-- devmgmt.msc -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_devmgmt">devmgmt.msc</code>
-                            <button class="copy-btn bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_devmgmt', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdDevmgmtDesc">Atidaro Įrenginių tvarkytuvę, skirtą peržiūrėti ir valdyti aparatūrą bei tvarkykles.</p>
-                    </div>
-                    <!-- msconfig -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_msconfig">msconfig</code>
-                            <button class="copy-btn bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_msconfig', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdMsconfigDesc">Atidaro Sistemos konfigūraciją, skirtą valdyti paleisties parinktis, paslaugas ir paleisties programas.</p>
-                    </div>
-                    <!-- control -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_control">control</code>
-                            <button class="copy-btn bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_control', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdControlDesc">Atidaro klasikinį Valdymo skydą.</p>
-                    </div>
-                    <!-- appwiz.cpl -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_appwiz">appwiz.cpl</code>
-                            <button class="copy-btn bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_appwiz', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdAppwizDesc">Atidaro „Programos ir funkcijos“, skirtą greitai pašalinti programas.</p>
-                    </div>
-                    <!-- perfmon -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_perfmon">perfmon</code>
-                            <button class="copy-btn bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_perfmon', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdPerfmonDesc">Atidaro Našumo monitorių, skirtą išsamiai analizuoti sistemos našumą ir išteklių naudojimą.</p>
-                    </div>
-                    <!-- mstsc -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_mstsc">mstsc</code>
-                            <button class="copy-btn bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_mstsc', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdMstscDesc">Atidaro Nuotolinio darbalaukio ryšio klientą.</p>
-                    </div>
-                    <!-- inetcpl.cpl -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_inetcpl">inetcpl.cpl</code>
-                            <button class="copy-btn bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_inetcpl', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdInetcplDesc">Atidaro Interneto ypatybes, skirtas valdyti podėlį, saugumą ir tarpinio serverio nustatymus.</p>
-                    </div>
-                    <!-- powercfg.cpl -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_powercfg">powercfg.cpl</code>
-                            <button class="copy-btn bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_powercfg', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdPowercfgDesc">Atidaro Maitinimo parinktis, skirtas valdyti maitinimo planus ir miego režimo nustatymus.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Saugumo ir Administravimo Įrankiai -->
-            <div>
-                <h2 class="text-2xl font-semibold border-b-2 border-teal-500 pb-2 mb-4 text-gray-900 dark:text-white" data-translate-key="categorySecurity">
-                    <i class="fas fa-shield-alt mr-2"></i>Saugumo ir Administravimo Įrankiai
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- gpedit.msc -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_gpedit">gpedit.msc</code>
-                            <button class="copy-btn bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_gpedit', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdGpeditDesc">Atidaro Vietinės grupės strategijos redaktorių (Nėra Windows Home versijoje).</p>
-                    </div>
-                    <!-- regedit -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_regedit">regedit</code>
-                            <button class="copy-btn bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_regedit', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdRegeditDesc">Atidaro Registro redaktorių. (Naudokite atsargiai).</p>
-                    </div>
-                    <!-- secpol.msc -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_secpol">secpol.msc</code>
-                            <button class="copy-btn bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_secpol', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdSecpolDesc">Atidaro Vietinės saugos strategijos redaktorių (Nėra Windows Home versijoje).</p>
-                    </div>
-                    <!-- netplwiz -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_netplwiz">netplwiz</code>
-                            <button class="copy-btn bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_netplwiz', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdNetplwizDesc">Atidaro išplėstinį Vartotojo paskyrų valdymo skydą (taip pat `control userpasswords2`).</p>
-                    </div>
-                    <!-- lusrmgr.msc -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_lusrmgr">lusrmgr.msc</code>
-                            <button class="copy-btn bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_lusrmgr', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdLusrmgrDesc">Atidaro Vietinių vartotojų ir grupių tvarkytuvę (Nėra Windows Home versijoje).</p>
-                    </div>
-                    <!-- certmgr.msc -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_certmgr">certmgr.msc</code>
-                            <button class="copy-btn bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_certmgr', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdCertmgrDesc">Atidaro Sertifikatų tvarkytuvę dabartiniam vartotojui.</p>
-                    </div>
-                    <!-- printmanagement.msc -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_printmgmt">printmanagement.msc</code>
-                            <button class="copy-btn bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_printmgmt', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdPrintmgmtDesc">Atidaro Spausdinimo valdymo konsolę, skirtą valdyti spausdintuvus ir spausdinimo serverius.</p>
-                    </div>
-                    <!-- gpupdate /force -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_1g">gpupdate /force</code>
-                            <button class="copy-btn bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_1g', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmd1gDesc">Priverstinai atnaujina ir pritaiko visus Grupės strategijos nustatymus.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PowerShell Specifiniai -->
-            <div>
-                <h2 class="text-2xl font-semibold border-b-2 border-cyan-500 pb-2 mb-4 text-gray-900 dark:text-white" data-translate-key="categoryPowershell">
-                    <i class="fas fa-terminal mr-2"></i>PowerShell Specifiniai
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Get-Help -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 powershell-code dark:text-blue-300 p-2 rounded" id="cmd_ps_gethelp">Get-Help Get-Process</code>
-                            <button class="copy-btn bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_ps_gethelp', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdPsGethelpDesc"><strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Rodo išsamią pagalbą apie bet kurią cmdlet (komandą).</p>
-                    </div>
-                    <!-- Update-Help -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 powershell-code dark:text-blue-300 p-2 rounded" id="cmd_ps_updatehelp">Update-Help</code>
-                            <button class="copy-btn bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_ps_updatehelp', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdPsUpdatehelpDesc"><strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Atsisiunčia naujausius pagalbos failus PowerShell cmdlet'ams. (Vykdyti kaip Administratorius).</p>
-                    </div>
-                    <!-- Get-Command -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 powershell-code dark:text-blue-300 p-2 rounded" id="cmd_ps_getcmd">Get-Command</code>
-                            <button class="copy-btn bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_ps_getcmd', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdPsGetcmdDesc"><strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Rodo visas galimas komandas, cmdlet'us ir funkcijas.</p>
-                    </div>
-                    <!-- Measure-Command -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 powershell-code dark:text-blue-300 p-2 rounded" id="cmd_ps_measure">Measure-Command { Get-Process }</code>
-                            <button class="copy-btn bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_ps_measure', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdPsMeasureDesc"><strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Matuoja, kiek laiko užtrunka įvykdyti komandą ar scenarijaus bloką.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pritaikymo ir Įvairūs Įrankiai -->
-            <div>
-                <h2 class="text-2xl font-semibold border-b-2 border-orange-500 pb-2 mb-4 text-gray-900 dark:text-white" data-translate-key="categoryAccessibility">
-                    <i class="fas fa-toolbox mr-2"></i>Pritaikymo ir Įvairūs Įrankiai
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- snippingtool -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_snippingtool">snippingtool</code>
-                            <button class="copy-btn bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_snippingtool', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdSnippingtoolDesc">Atidaro Iškarpų įrankį (arba Iškirpti ir eskizuoti) ekrano kopijoms daryti.</p>
-                    </div>
-                    <!-- charmap -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_charmap">charmap</code>
-                            <button class="copy-btn bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_charmap', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdCharmapDesc">Atidaro Simbolių lentelę, skirtą rasti ir kopijuoti specialius simbolius.</p>
-                    </div>
-                    <!-- magnify -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_magnify">magnify</code>
-                            <button class="copy-btn bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_magnify', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdMagnifyDesc">Įjungia arba išjungia Didintuvo pritaikymo neįgaliesiems įrankį.</p>
-                    </div>
-                    <!-- osk -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_osk">osk</code>
-                            <button class="copy-btn bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_osk', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdOskDesc">Atidaro Ekrano klaviatūrą.</p>
-                    </div>
-                    <!-- sndvol -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_sndvol">sndvol</code>
-                            <button class="copy-btn bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_sndvol', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdSndvolDesc">Atidaro Garso maišytuvą, skirtą valdyti skirtingų programų garso lygius.</p>
-                    </div>
-                    <!-- timedate.cpl -->
-                    <div class="command-card bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <div class="flex justify-between items-center">
-                            <code class="text-sm font-mono bg-gray-100 dark:bg-gray-700 text-pink-600 dark:text-pink-400 p-2 rounded" id="cmd_timedate">timedate.cpl</code>
-                            <button class="copy-btn bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-3 rounded-md text-sm" onclick="copyToClipboard('cmd_timedate', this)">
-                                <i class="fas fa-copy mr-1"></i> <span data-translate-key="copyBtn">Kopijuoti</span>
-                            </button>
-                        </div>
-                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400" data-translate-key="cmdTimedateDesc">Atidaro Datos ir laiko nustatymų skydelį.</p>
-                    </div>
-                </div>
-            </div>
-
-        </main>
-
-        <footer class="text-center mt-10 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <!-- Buy Me A Coffee Button -->
-            <div class="mb-4">
-                <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="copypastelt" data-color="#5F7FFF" data-emoji="" data-font="Arial" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#ffffff" data-coffee-color="#FFDD00"></script>
-            </div>
-            
-            <p class="text-sm text-gray-500 dark:text-gray-400" data-translate-key="footerNote1">Naudokite šias komandas Komandinėje eilutėje arba PowerShell, geriausia administratoriaus teisėmis.</p>
-            <p class="text-xs text-gray-400 dark:text-gray-500 mt-2" data-translate-key="footerNote2">Komandos, pažymėtos <strong class="text-blue-600 dark:text-blue-300">PowerShell</strong>, turi būti vykdomos PowerShell lange. Komandos, kurios baigiasi <strong class="text-pink-600 dark:text-pink-400">.msc</strong> arba <strong class="text-pink-600 dark:text-pink-400">.cpl</strong>, atidaro GUI langus.</p>
-        </footer>
-
-    </div>
-
-    <!-- Šis textarea yra paslėptas ir naudojamas kopijavimo funkcijai -->
-    <textarea id="copy-helper" style="position: absolute; left: -9999px;"></textarea>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Copied to clipboard!</div>
 
     <script>
-        // --- Vertimai ---
-        const translations = {
-            'en': {
-                'pageTitle': 'Windows Troubleshooting Cheatsheet',
-                'headerTitle': 'Windows Troubleshooting Cheatsheet',
-                'headerSubtitle': 'A collection of built-in tools and commands for diagnosing and fixing Windows issues.',
-                'copyBtn': 'Copy',
-                'copiedBtn': 'Copied!',
-                'failedBtn': 'Failed',
-                'categoryNetworking': 'Networking',
-                'cmd1Desc': 'Displays full TCP/IP configuration for all adapters, including MAC address and DHCP info.',
-                'cmd2Desc': 'Tests connectivity to a specific IP address or domain to check for packet loss.',
-                'cmd3Desc': 'Traces the route packets take to a destination, identifying network hops and delays.',
-                'cmd4Desc': 'Shows active network connections, listening ports, and the owning Process ID (PID).',
-                'cmdFlushdnsDesc': "Clears the local DNS resolver cache. Use this if websites aren't resolving correctly.",
-                'cmdRenewdnsDesc': 'Releases and renews the IP address from the DHCP server. Good for connection issues.',
-                'cmdNcpaDesc': 'Opens the Network Connections panel to manage network adapters.',
-                'categorySystemHealth': 'System File & Health',
-                'cmd5Desc': 'System File Checker. Scans and repairs corrupted or missing protected Windows system files.',
-                'cmd6Desc': 'Repairs the underlying Windows component store, which `sfc` relies on. Run this if `sfc` fails.',
-                'cmd7Desc': 'Checks a disk for file system errors (/f) and locates bad sectors to recover data (/r).',
-                'cmd8Desc': 'Opens the Resource Monitor, providing a detailed real-time view of CPU, memory, disk, and network usage.',
-                'cmdAdvstartupDesc': 'Restarts the PC into the Advanced Startup Options menu for Safe Mode, System Restore, etc.',
-                'cmdMrtDesc': 'Opens the Malicious Software Removal Tool to scan for and remove specific, prevalent malware.',
-                'cmdVerifierDesc': 'Opens Driver Verifier Manager to stress-test drivers for instability. (Advanced users only).',
-                'cmdRelmonDesc': 'Opens the Reliability Monitor to view a history of system stability and application crashes.',
-                'categorySystemInfo': 'System Information',
-                'cmd9Desc': "Displays a detailed configuration summary of the computer's hardware and software.",
-                'cmd10Desc': 'Opens the System Information GUI, a comprehensive tool for viewing hardware, components, and software.',
-                'cmd11Desc': 'DirectX Diagnostic Tool. Gathers information about DirectX components and drivers for multimedia troubleshooting.',
-                'cmdDriverqueryDesc': 'Displays a list of all installed device drivers and their properties.',
-                'cmdSysdmDesc': 'Opens System Properties to manage computer name, performance settings, and restore points.',
-                'cmdGpresultDesc': 'Displays the Resultant Set of Policy (RSoP) for the logged-in user and computer.',
-                'categoryProcess': 'Process & Service Management',
-                'cmdTaskmgrDesc': 'Opens the Task Manager to view running processes, performance, and startup apps.',
-                'cmd12Desc': 'Displays a list of currently running processes on the local or a remote machine.',
-                'cmd13Desc': 'Forcefully terminates a process by its Process ID (PID). Use `tasklist` to find the PID.',
-                'cmd14Desc': 'Opens the Services management console to start, stop, and configure Windows services.',
-                'cmdTaskschdDesc': 'Opens the Task Scheduler to view and manage automated tasks.',
-                'cmdPsCpuDesc': '<strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Lists the top 10 processes by CPU usage.',
-                'cmdPsStopprocDesc': '<strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Stops a process by its name (e.g., "notepad").',
-                'cmdPsServicesDesc': '<strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Lists all services on the system and their status.',
-                'cmdPsStartsvcDesc': '<strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Starts a service by name (e.g., the "Spooler" print service).',
-                'categoryDisk': 'Disk & Storage Management',
-                'cmdDiskmgmtDesc': 'Opens the Disk Management GUI to manage partitions, format drives, and assign drive letters.',
-                'cmdDiskpartDesc': 'Opens the command-line disk partitioning utility. (Advanced users only).',
-                'cmdCleanmgrDesc': 'Opens the Disk Cleanup utility to free up space by removing temporary files.',
-                'cmdDfrguiDesc': 'Opens the Drive Optimizer to defragment HDDs or optimize (TRIM) SSDs.',
-                'cmdRobocopyDesc': 'Robust File Copy. A powerful tool for copying files and directories. (e.g., `robocopy C:\\src D:\\dest /E`)',
-                'cmdPsDiskhealthDesc': '<strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Checks all physical disks and lists any that are not \'Healthy\'.',
-                'categoryUtilities': 'Useful Utilities & Applets',
-                'cmdEventvwrDesc': 'Opens the Event Viewer, which shows a log of system and application errors and events.',
-                'cmdCompmgmtDesc': 'Opens Computer Management, a console with many tools (Event Viewer, Disks, Services, etc.).',
-                'cmdDevmgmtDesc': 'Opens the Device Manager to view and manage hardware and drivers.',
-                'cmdMsconfigDesc': 'Opens System Configuration to manage boot options, services, and startup programs.',
-                'cmdControlDesc': 'Opens the classic Control Panel.',
-                'cmdAppwizDesc': 'Opens "Programs and Features" to quickly uninstall applications.',
-                'cmdPerfmonDesc': 'Opens the Performance Monitor to analyze system performance and resource usage in detail.',
-                'cmdMstscDesc': 'Opens the Remote Desktop Connection client.',
-                'cmdInetcplDesc': 'Opens Internet Properties to manage cache, security, and proxy settings.',
-                'cmdPowercfgDesc': 'Opens Power Options to manage power plans and sleep settings.',
-                'categorySecurity': 'Security & Administrative Tools',
-                'cmdGpeditDesc': 'Opens the Local Group Policy Editor (Not in Windows Home edition).',
-                'cmdRegeditDesc': 'Opens the Registry Editor. (Use with caution).',
-                'cmdSecpolDesc': 'Opens the Local Security Policy editor (Not in Windows Home edition).',
-                'cmdNetplwizDesc': 'Opens the advanced User Accounts control panel (also `control userpasswords2`).',
-                'cmdLusrmgrDesc': 'Opens Local Users and Groups manager (Not in Windows Home edition).',
-                'cmdCertmgrDesc': 'Opens the Certificate Manager for the current user.',
-                'cmdPrintmgmtDesc': 'Opens the Print Management console to manage printers and print servers.',
-                'cmd1gDesc': 'Forces an immediate update and reapplication of all Group Policy settings.',
-                'categoryPowershell': 'PowerShell Specific',
-                'cmdPsGethelpDesc': '<strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Shows detailed help for any cmdlet (command).',
-                'cmdPsUpdatehelpDesc': '<strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Downloads the latest help files for PowerShell cmdlets. (Run as Admin).',
-                'cmdPsGetcmdDesc': '<strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Lists all available commands, cmdlets, and functions.',
-                'cmdPsMeasureDesc': '<strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Measures how long a command or script block takes to execute.',
-                'categoryAccessibility': 'Accessibility & Misc. Tools',
-                'cmdSnippingtoolDesc': 'Opens the Snipping Tool (or Snip & Sketch) for taking screenshots.',
-                'cmdCharmapDesc': 'Opens the Character Map to find and copy special characters.',
-                'cmdMagnifyDesc': 'Toggles the Magnifier accessibility tool.',
-                'cmdOskDesc': 'Opens the On-Screen Keyboard.',
-                'cmdSndvolDesc': 'Opens the Volume Mixer to control audio levels for different applications.',
-                'cmdTimedateDesc': 'Opens the Date and Time settings panel.',
-                'footerNote1': 'Use these commands in Command Prompt or PowerShell, preferably as an Administrator.',
-                'footerNote2': 'Commands marked <strong class="text-blue-600 dark:text-blue-300">PowerShell</strong> must be run in a PowerShell window. Commands ending in <strong class="text-pink-600 dark:text-pink-400">.msc</strong> or <strong class="text-pink-600 dark:text-pink-400">.cpl</strong> open GUI windows.'
+        // --- Data ---
+        const commands = [
+            // Network
+            { id: 1, cmd: "ipconfig /all", cat: "network", desc_en: "Display full configuration information.", desc_lt: "Rodo pilną tinklo konfigūraciją (IP, MAC, DNS)." },
+            { id: 2, cmd: "ipconfig /flushdns", cat: "network", desc_en: "Clears the DNS resolver cache.", desc_lt: "Išvalo DNS sprendimų talpyklą (padeda, jei neveikia svetainės)." },
+            { id: 3, cmd: "ipconfig /release & ipconfig /renew", cat: "network", desc_en: "Refreshes your IP address.", desc_lt: "Atnaujina IP adresą iš DHCP serverio." },
+            { id: 4, cmd: "ping google.com -t", cat: "network", desc_en: "Test connectivity continuously.", desc_lt: "Nuolatinis ryšio tikrinimas su serveriu (-t parametras)." },
+            { id: 5, cmd: "netstat -an | findstr LISTEN", cat: "network", desc_en: "List open ports.", desc_lt: "Parodo visus atvirus prievadus (Ports), kurie klauso ryšio." },
+            { id: 6, cmd: "netsh wlan show profiles", cat: "network", desc_en: "List saved Wi-Fi networks.", desc_lt: "Parodo visus išsaugotus Wi-Fi tinklus." },
+            
+            // System
+            { id: 7, cmd: "sfc /scannow", cat: "system", desc_en: "Scan and repair system files.", desc_lt: "Skenuoja ir bando pataisyti sugadintus Windows sisteminius failus." },
+            { id: 8, cmd: "dism /online /cleanup-image /restorehealth", cat: "system", desc_en: "Fix Windows image corruption.", desc_lt: "Pataiso Windows atvaizdą (naudoti, jei sfc nepavyksta)." },
+            { id: 9, cmd: "systeminfo", cat: "system", desc_en: "Detailed system configuration info.", desc_lt: "Detali informacija apie sistemą (OS versija, RAM, BIOS, Hotfix)." },
+            { id: 10, cmd: "gpupdate /force", cat: "system", desc_en: "Force update group policies.", desc_lt: "Priverstinai atnaujina grupės politikas (Group Policy)." },
+            { id: 11, cmd: "shutdown /r /o /t 0", cat: "system", desc_en: "Restart into Advanced Boot Options.", desc_lt: "Perkrauna į atkūrimo meniu (Advanced Boot Options)." },
+
+            // Disk
+            { id: 12, cmd: "chkdsk C: /f /r", cat: "disk", desc_en: "Check disk for errors and bad sectors.", desc_lt: "Tikrina diską dėl klaidų ir blogų sektorių (reikalauja restarto)." },
+            { id: 13, cmd: "diskpart", cat: "disk", desc_en: "Disk partition management tool.", desc_lt: "Disko skirsnio valdymo įrankis (atsargiai!)." },
+            { id: 14, cmd: "cleanmgr", cat: "disk", desc_en: "Disk Cleanup utility.", desc_lt: "Disko valymo įrankis (pašalina temp failus)." },
+
+            // Shell / Run
+            { id: 15, cmd: "shell:AppsFolder", cat: "shell", desc_en: "Open folder with all installed apps.", desc_lt: "Atidaro aplanką su visomis įdiegtomis programomis." },
+            { id: 16, cmd: "shell:startup", cat: "shell", desc_en: "Open current user startup folder.", desc_lt: "Atidaro dabartinio vartotojo automatinio paleidimo aplanką." },
+            { id: 17, cmd: "appwiz.cpl", cat: "shell", desc_en: "Programs and Features.", desc_lt: "Atidaro 'Programs and Features' langą programų šalinimui." },
+            { id: 18, cmd: "ncpa.cpl", cat: "shell", desc_en: "Network Connections.", desc_lt: "Greitas priėjimas prie tinklo plokščių nustatymų." },
+            { id: 19, cmd: "devmgmt.msc", cat: "shell", desc_en: "Device Manager.", desc_lt: "Atidaro Įrenginių tvarkytuvę (Device Manager)." },
+            { id: 20, cmd: "lusrmgr.msc", cat: "shell", desc_en: "Local Users and Groups.", desc_lt: "Vietinių vartotojų ir grupių valdymas." }
+        ];
+
+        // --- Translations ---
+        const i18n = {
+            lt: {
+                title: "Windows Paruoštukė",
+                hero_title: "IT Administratoriaus Įrankinė",
+                hero_desc: "Greita prieiga prie svarbiausių Windows komandų diagnostikai, tinklui ir sistemos valdymui.",
+                cat_all: "Visi",
+                cat_net: "Tinklas",
+                cat_sys: "Sistema",
+                cat_disk: "Diskas",
+                cat_shell: "Vykdyti (Run)",
+                no_results: "Nerasta komandų",
+                try_search: "Pabandykite kitą raktažodį.",
+                toast_msg: "Nukopijuota!",
+                coffee: "Nupirk kavos"
             },
-            'lt': {
-                'pageTitle': 'Windows Problemų Sprendimo Vadovas',
-                'headerTitle': 'Windows Problemų Sprendimo Vadovas',
-                'headerSubtitle': 'Rinkinys integruotų įrankių ir komandų, skirtų Windows problemoms diagnozuoti ir spręsti.',
-                'copyBtn': 'Kopijuoti',
-                'copiedBtn': 'Nukopijuota!',
-                'failedBtn': 'Nepavyko',
-                'categoryNetworking': 'Tinklo Diagnostika',
-                'cmd1Desc': 'Rodo pilną TCP/IP konfigūraciją visiems adapteriams, įskaitant MAC adresą ir DHCP informaciją.',
-                'cmd2Desc': 'Testuoja ryšį su konkrečiu IP adresu ar domenu, tikrina paketų praradimą.',
-                'cmd3Desc': 'Atseka paketų maršrutą iki tikslo, identifikuoja tinklo šuolius ir vėlavimus.',
-                'cmd4Desc': 'Rodo aktyvius tinklo ryšius, klausomus prievadus ir susijusio proceso ID (PID).',
-                'cmdFlushdnsDesc': 'Išvalo vietinę DNS spartinančiąją atmintinę. Naudokite, jei svetainės nerodomos teisingai.',
-                'cmdRenewdnsDesc': 'Atnaujina IP adresą iš DHCP serverio. Naudinga esant ryšio problemoms.',
-                'cmdNcpaDesc': 'Atidaro tinklo jungčių skydelį tinklo adapterių valdymui.',
-                'categorySystemHealth': 'Sistemos Failai ir Būsena',
-                'cmd5Desc': 'Sistemos failų tikrintuvas. Skenuoja ir taiso sugadintus ar trūkstamus apsaugotus Windows sistemos failus.',
-                'cmd6Desc': 'Taiso Windows komponentų saugyklą, kuria remiasi `sfc`. Vykdykite, jei `sfc` nepavyksta.',
-                'cmd7Desc': 'Tikrina diską ieškant failų sistemos klaidų (/f) ir blogų sektorių, kad atkurtų duomenis (/r).',
-                'cmd8Desc': 'Atidaro Išteklių monitorių, rodantį išsamų realaus laiko CPU, atminties, disko ir tinklo naudojimą.',
-                'cmdAdvstartupDesc': 'Perkrauna kompiuterį į Išplėstinės paleisties parinkčių meniu (Saugi veiksena, Sistemos atkūrimas ir kt.).',
-                'cmdMrtDesc': 'Atidaro Kenkėjiškų programų šalinimo įrankį, skirtą skenuoti ir pašalinti specifines, paplitusias kenkėjiškas programas.',
-                'cmdVerifierDesc': 'Atidaro Tvarkyklės tikrintuvo tvarkytuvę, skirtą testuoti tvarkykles dėl nestabilumo. (Tik pažengusiems).',
-                'cmdRelmonDesc': 'Atidaro Patikimumo monitorių, rodantį sistemos stabilumo ir programų strigimų istoriją.',
-                'categorySystemInfo': 'Sistemos Informacija',
-                'cmd9Desc': 'Rodo išsamią kompiuterio aparatinės ir programinės įrangos konfigūracijos suvestinę.',
-                'cmd10Desc': 'Atidaro Sistemos informacijos GUI – išsamų įrankį aparatūrai, komponentams ir programinei įrangai peržiūrėti.',
-                'cmd11Desc': 'DirectX diagnostikos įrankis. Renka informaciją apie DirectX komponentus ir tvarkykles multimedijos problemoms spręsti.',
-                'cmdDriverqueryDesc': 'Rodo visų įdiegtų įrenginių tvarkyklių ir jų ypatybių sąrašą.',
-                'cmdSysdmDesc': 'Atidaro Sistemos ypatybes, skirtas valdyti kompiuterio pavadinimą, našumo nustatymus ir atkūrimo taškus.',
-                'cmdGpresultDesc': 'Rodo pritaikytų grupės strategijų rinkinį (RSoP) prisijungusiam vartotojui ir kompiuteriui.',
-                'categoryProcess': 'Procesų ir Paslaugų Valdymas',
-                'cmdTaskmgrDesc': 'Atidaro Užduočių tvarkytuvę, skirtą peržiūrėti vykdomus procesus, našumą ir paleisties programas.',
-                'cmd12Desc': 'Rodo visų šiuo metu vykdomų procesų sąrašą vietiniame ar nuotoliniame kompiuteryje.',
-                'cmd13Desc': 'Priverstinai nutraukia procesą pagal jo Proceso ID (PID). Naudokite `tasklist`, kad rastumėte PID.',
-                'cmd14Desc': 'Atidaro Paslaugų valdymo konsolę, skirtą Windows paslaugoms paleisti, sustabdyti ir konfigūruoti.',
-                'cmdTaskschdDesc': 'Atidaro Užduočių planuoklę, skirtą peržiūrėti ir valdyti automatizuotas užduotis.',
-                'cmdPsCpuDesc': '<strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Rodo 10 daugiausiai CPU naudojančių procesų.',
-                'cmdPsStopprocDesc': '<strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Sustabdo procesą pagal jo pavadinimą (pvz., „notepad“).',
-                'cmdPsServicesDesc': '<strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Rodo visas sistemos paslaugas ir jų būseną.',
-                'cmdPsStartsvcDesc': '<strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Paleidžia paslaugą pagal pavadinimą (pvz., spausdinimo „Spooler“ paslaugą).',
-                'categoryDisk': 'Disko ir Saugyklos Valdymas',
-                'cmdDiskmgmtDesc': 'Atidaro Diskų valdymo GUI, skirtą valdyti skaidinius, formatuoti diskus ir priskirti diskų raides.',
-                'cmdDiskpartDesc': 'Atidaro komandinės eilutės diskų skaidymo įrankį. (Tik pažengusiems).',
-                'cmdCleanmgrDesc': 'Atidaro Disko valymo įrankį, skirtą atlaisvinti vietos pašalinant laikinus failus.',
-                'cmdDfrguiDesc': 'Atidaro Diskų optimizavimo įrankį, skirtą defragmentuoti HDD arba optimizuoti (TRIM) SSD.',
-                'cmdRobocopyDesc': 'Patikimas failų kopijavimas. Galingas įrankis failams ir katalogams kopijuoti. (pvz., `robocopy C:\\src D:\\dest /E`)',
-                'cmdPsDiskhealthDesc': '<strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Tikrina visus fizinius diskus ir parodo tuos, kurių būsena nėra „Healthy“ (Sveikas).',
-                'categoryUtilities': 'Naudingi Įrankiai ir Valdikliai',
-                'cmdEventvwrDesc': 'Atidaro Įvykių žurnalą, rodantį sistemos ir programų klaidų bei įvykių žurnalą.',
-                'cmdCompmgmtDesc': 'Atidaro Kompiuterio valdymą – konsolę su daugeliu įrankių (Įvykių žurnalas, Diskai, Paslaugos ir kt.).',
-                'cmdDevmgmtDesc': 'Atidaro Įrenginių tvarkytuvę, skirtą peržiūrėti ir valdyti aparatūrą bei tvarkykles.',
-                'cmdMsconfigDesc': 'Atidaro Sistemos konfigūraciją, skirtą valdyti paleisties parinktis, paslaugas ir paleisties programas.',
-                'cmdControlDesc': 'Atidaro klasikinį Valdymo skydą.',
-                'cmdAppwizDesc': 'Atidaro „Programos ir funkcijos“, skirtą greitai pašalinti programas.',
-                'cmdPerfmonDesc': 'Atidaro Našumo monitorių, skirtą išsamiai analizuoti sistemos našumą ir išteklių naudojimą.',
-                'cmdMstscDesc': 'Atidaro Nuotolinio darbalaukio ryšio klientą.',
-                'cmdInetcplDesc': 'Atidaro Interneto ypatybes, skirtas valdyti podėlį, saugumą ir tarpinio serverio nustatymus.',
-                'cmdPowercfgDesc': 'Atidaro Maitinimo parinktis, skirtas valdyti maitinimo planus ir miego režimo nustatymus.',
-                'categorySecurity': 'Saugumo ir Administravimo Įrankiai',
-                'cmdGpeditDesc': 'Atidaro Vietinės grupės strategijos redaktorių (Nėra Windows Home versijoje).',
-                'cmdRegeditDesc': 'Atidaro Registro redaktorių. (Naudokite atsargiai).',
-                'cmdSecpolDesc': 'Atidaro Vietinės saugos strategijos redaktorių (Nėra Windows Home versijoje).',
-                'cmdNetplwizDesc': 'Atidaro išplėstinį Vartotojo paskyrų valdymo skydą (taip pat `control userpasswords2`).',
-                'cmdLusrmgrDesc': 'Atidaro Vietinių vartotojų ir grupių tvarkytuvę (Nėra Windows Home versijoje).',
-                'cmdCertmgrDesc': 'Atidaro Sertifikatų tvarkytuvę dabartiniam vartotojui.',
-                'cmdPrintmgmtDesc': 'Atidaro Spausdinimo valdymo konsolę, skirtą valdyti spausdintuvus ir spausdinimo serverius.',
-                'cmd1gDesc': 'Priverstinai atnaujina ir pritaiko visus Grupės strategijos nustatymus.',
-                'categoryPowershell': 'PowerShell Specifiniai',
-                'cmdPsGethelpDesc': '<strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Rodo išsamią pagalbą apie bet kurią cmdlet (komandą).',
-                'cmdPsUpdatehelpDesc': '<strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Atsisiunčia naujausius pagalbos failus PowerShell cmdlet\'ams. (Vykdyti kaip Administratorius).',
-                'cmdPsGetcmdDesc': '<strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Rodo visas galimas komandas, cmdlet\'us ir funkcijas.',
-                'cmdPsMeasureDesc': '<strong class="text-blue-600 dark:text-blue-300">PowerShell:</strong> Matuoja, kiek laiko užtrunka įvykdyti komandą ar scenarijaus bloką.',
-                'categoryAccessibility': 'Pritaikymo ir Įvairūs Įrankiai',
-                'cmdSnippingtoolDesc': 'Atidaro Iškarpų įrankį (arba Iškirpti ir eskizuoti) ekrano kopijoms daryti.',
-                'cmdCharmapDesc': 'Atidaro Simbolių lentelę, skirtą rasti ir kopijuoti specialius simbolius.',
-                'cmdMagnifyDesc': 'Įjungia arba išjungia Didintuvo pritaikymo neįgaliesiems įrankį.',
-                'cmdOskDesc': 'Atidaro Ekrano klaviatūrą.',
-                'cmdSndvolDesc': 'Atidaro Garso maišytuvą, skirtą valdyti skirtingų programų garso lygius.',
-                'cmdTimedateDesc': 'Atidaro Datos ir laiko nustatymų skydelį.',
-                'footerNote1': 'Naudokite šias komandas Komandinėje eilutėje arba PowerShell, geriausia administratoriaus teisėmis.',
-                'footerNote2': 'Komandos, pažymėtos <strong class="text-blue-600 dark:text-blue-300">PowerShell</strong>, turi būti vykdomos PowerShell lange. Komandos, kurios baigiasi <strong class="text-pink-600 dark:text-pink-400">.msc</strong> arba <strong class="text-pink-600 dark:text-pink-400">.cpl</strong>, atidaro GUI langus.'
+            en: {
+                title: "Windows Cheatsheet",
+                hero_title: "IT Admin Toolkit",
+                hero_desc: "Quick access to essential Windows commands for diagnostics, networking, and system management.",
+                cat_all: "All",
+                cat_net: "Network",
+                cat_sys: "System",
+                cat_disk: "Disk",
+                cat_shell: "Shell & Run",
+                no_results: "No commands found",
+                try_search: "Try a different keyword.",
+                toast_msg: "Copied to clipboard!",
+                coffee: "Buy Coffee"
             }
         };
 
-        // --- Kalbos keitimo logika ---
+        // --- State ---
+        let currentLang = localStorage.getItem('lang') || 'lt'; // Default Lithuanian
+        let currentCategory = 'all';
+        let searchQuery = '';
 
-        let currentLang = localStorage.getItem('lang') || 'lt'; // Pagrindinė kalba - Lietuvių
+        // --- Elements ---
+        const grid = document.getElementById('cardsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const langToggle = document.getElementById('langToggle');
+        const themeToggle = document.getElementById('themeToggle');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const htmlEl = document.documentElement;
+        const toast = document.getElementById('toast');
 
-        function setLanguage(lang) {
-            currentLang = lang;
-            localStorage.setItem('lang', lang);
+        // --- Initialization ---
+        function init() {
+            // Theme Check
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                htmlEl.classList.add('dark');
+            } else {
+                htmlEl.classList.remove('dark');
+            }
+            updateThemeIcon();
             
-            // Nustatome HTML lang atributą
-            document.documentElement.lang = lang;
+            // Lang Check
+            updateLangUI();
 
-            // Atnaujiname perjungimo mygtuko tekstą
-            const langToggleBtn = document.getElementById('lang-toggle-btn');
-            langToggleBtn.textContent = lang === 'lt' ? 'EN' : 'LT';
+            // Render
+            render();
+        }
 
-            // Verčiame visus elementus su data-translate-key atributu
-            const elementsToTranslate = document.querySelectorAll('[data-translate-key]');
-            elementsToTranslate.forEach(element => {
-                const key = element.getAttribute('data-translate-key');
-                if (translations[lang] && translations[lang][key]) {
-                    // Naudojame innerHTML, kad palaikytume HTML žymes (pvz., <strong>)
-                    element.innerHTML = translations[lang][key];
+        // --- Rendering ---
+        function render() {
+            grid.innerHTML = '';
+            
+            const filtered = commands.filter(item => {
+                const matchesCat = currentCategory === 'all' || item.cat === currentCategory;
+                const searchLower = searchQuery.toLowerCase();
+                const matchesSearch = item.cmd.toLowerCase().includes(searchLower) || 
+                                      item.desc_en.toLowerCase().includes(searchLower) || 
+                                      item.desc_lt.toLowerCase().includes(searchLower);
+                return matchesCat && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                document.getElementById('noResults').classList.remove('hidden');
+            } else {
+                document.getElementById('noResults').classList.add('hidden');
+                filtered.forEach(item => {
+                    const desc = currentLang === 'lt' ? item.desc_lt : item.desc_en;
+                    const card = document.createElement('div');
+                    card.className = "bg-white dark:bg-win-dark border border-gray-200 dark:border-gray-700 rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow group flex flex-col justify-between h-full";
+                    
+                    card.innerHTML = `
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">${item.cat}</span>
+                                <i class="fas fa-terminal text-gray-300 group-hover:text-win-blue transition-colors"></i>
+                            </div>
+                            <code class="cmd-font block text-lg font-bold text-win-blue dark:text-blue-400 mb-3 break-all cursor-pointer" onclick="copyToClipboard('${item.cmd.replace(/\\/g, '\\\\')}')" title="Click to copy">${item.cmd}</code>
+                            <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">${desc}</p>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-end">
+                            <button onclick="copyToClipboard('${item.cmd.replace(/\\/g, '\\\\')}')" class="text-xs font-bold text-gray-400 hover:text-win-blue dark:hover:text-white transition-colors flex items-center gap-1">
+                                <i class="fas fa-copy"></i> COPY
+                            </button>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+        }
+
+        // --- Logic ---
+        function updateThemeIcon() {
+            const icon = themeToggle.querySelector('i');
+            if (htmlEl.classList.contains('dark')) {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            } else {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+        }
+
+        function updateLangUI() {
+            langToggle.textContent = currentLang.toUpperCase();
+            
+            // Update static texts
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[currentLang][key]) {
+                    el.textContent = i18n[currentLang][key];
                 }
             });
 
-            // Atnaujiname "Copy" mygtukų tekstą (kadangi jie turi papildomą ikonos elementą)
-            const copySpans = document.querySelectorAll('[data-translate-key="copyBtn"]');
-            copySpans.forEach(span => {
-                span.textContent = translations[lang]['copyBtn'];
+            // Re-render cards for description language change
+            render();
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const msg = i18n[currentLang].toast_msg;
+                toast.textContent = msg;
+                toast.className = "toast show";
+                setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
             });
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Nustatome pradinę kalbą užkrovus puslapį
-            setLanguage(currentLang);
+        // --- Event Listeners ---
+        
+        // Search
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            render();
+        });
 
-            // Priskiriame funkciją kalbos keitimo mygtukui
-            const langToggleBtn = document.getElementById('lang-toggle-btn');
-            langToggleBtn.addEventListener('click', () => {
-                const newLang = currentLang === 'lt' ? 'en' : 'lt';
-                setLanguage(newLang);
+        // Filter Buttons
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-win-blue', 'text-white');
+                    b.classList.add('bg-white', 'dark:bg-gray-800', 'text-gray-800', 'dark:text-gray-200');
+                });
+                btn.classList.remove('bg-white', 'dark:bg-gray-800', 'text-gray-800', 'dark:text-gray-200');
+                btn.classList.add('bg-win-blue', 'text-white');
+                currentCategory = btn.getAttribute('data-category');
+                render();
             });
         });
 
-        // --- Kopijavimo funkcija ---
+        // Toggle Language
+        langToggle.addEventListener('click', () => {
+            currentLang = currentLang === 'lt' ? 'en' : 'lt';
+            localStorage.setItem('lang', currentLang);
+            updateLangUI();
+        });
 
-        function copyToClipboard(elementId, buttonElement) {
-            const commandText = document.getElementById(elementId).innerText;
-            const copyHelper = document.getElementById('copy-helper');
-            copyHelper.value = commandText;
-            copyHelper.select();
-            copyHelper.setSelectionRange(0, 99999);
-
-            try {
-                document.execCommand('copy');
-
-                // Visual Feedback
-                const originalClasses = Array.from(buttonElement.classList).filter(cls => cls.startsWith('bg-') || cls.startsWith('hover:bg-'));
-                const copySpan = buttonElement.querySelector('span');
-                const originalCopyText = copySpan.textContent;
-                
-                buttonElement.innerHTML = `<i class="fas fa-check mr-1"></i> ${translations[currentLang]['copiedBtn']}`;
-                buttonElement.classList.remove(...originalClasses);
-                buttonElement.classList.add('bg-green-500', 'hover:bg-green-600');
-
-                setTimeout(() => {
-                    buttonElement.innerHTML = `<i class="fas fa-copy mr-1"></i> <span>${originalCopyText}</span>`;
-                    buttonElement.classList.remove('bg-green-500', 'hover:bg-green-600');
-                    buttonElement.classList.add(...originalClasses);
-                    // Atkuriame vertimo raktą, kad kalbos keitimas veiktų
-                    buttonElement.querySelector('span').setAttribute('data-translate-key', 'copyBtn');
-                }, 2000);
-
-            } catch (err) {
-                console.error('Failed to copy text: ', err);
-                const originalClasses = Array.from(buttonElement.classList).filter(cls => cls.startsWith('bg-') || cls.startsWith('hover:bg-'));
-                const copySpan = buttonElement.querySelector('span');
-                const originalCopyText = copySpan.textContent;
-
-                buttonElement.innerHTML = `<i class="fas fa-times mr-1"></i> ${translations[currentLang]['failedBtn']}`;
-                setTimeout(() => {
-                    buttonElement.innerHTML = `<i class="fas fa-copy mr-1"></i> <span>${originalCopyText}</span>`;
-                    buttonElement.classList.add(...originalClasses);
-                    buttonElement.querySelector('span').setAttribute('data-translate-key', 'copyBtn');
-                }, 2000);
-            }
-        }
-
-        // --- Tamsaus režimo logika ---
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-            if (e.matches) {
-                document.documentElement.classList.add('dark');
+        // Toggle Theme
+        themeToggle.addEventListener('click', () => {
+            if (htmlEl.classList.contains('dark')) {
+                htmlEl.classList.remove('dark');
+                localStorage.theme = 'light';
             } else {
-                document.documentElement.classList.remove('dark');
+                htmlEl.classList.add('dark');
+                localStorage.theme = 'dark';
             }
+            updateThemeIcon();
         });
+
+        // Start
+        init();
+
     </script>
+    <!-- Google Analytics / Plausible placeholder -->
+    <!-- <script defer data-domain="yourdomain.com" src="https://plausible.io/js/script.js"></script> -->
 </body>
 </html>
+
