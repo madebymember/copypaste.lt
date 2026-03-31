@@ -6,11 +6,11 @@ A simple, clean, single-page cheatsheet of common and useful Windows troubleshoo
 
 ## **Features**
 
-* \*\* 🇱🇹 / 🇬🇧 Bilingual Support:\*\* One-click toggle between Lithuanian (Default) and English. Language preference is saved in your browser.  
+* ** 🇱🇹 / 🇬🇧 Bilingual Support:** One-click toggle between Lithuanian (Default) and English. Language preference is saved in your browser.  
 * **🌓 Dark Mode Support:** Automatically detects system preference and respects local storage overrides.  
 * **📋 One-Click Copy:** Easily copy commands to your clipboard with visual feedback.  
 * **📂 Categorized:** Commands grouped by Networking, System Health, Disk Management, PowerShell, Security, etc.  
-* **⚡ Zero Build Step:** Built as a single index.html file using Tailwind CSS via CDN. No node\_modules or build processes required.  
+* **⚡ Zero Build Step:** Built as a single index.html file using Tailwind CSS via CDN. No node_modules or build processes required.  
 * **📊 Analytics Ready:** Integrated with Plausible Analytics (privacy-friendly).  
 * **☕ Support:** Includes a "Buy Me a Coffee" widget.
 
@@ -27,7 +27,7 @@ A simple, clean, single-page cheatsheet of common and useful Windows troubleshoo
 
 The site defaults to Lithuanian (lt). To change the default language to English, edit the currentLang variable in the script section of index.html:
 
-let currentLang \= localStorage.getItem('lang') || 'en'; // Change 'lt' to 'en'
+let currentLang = localStorage.getItem('lang') || 'en'; // Change 'lt' to 'en'
 
 ### **Analytics & Donations**
 
@@ -41,14 +41,14 @@ You can host this site for free in just a few minutes.
 ### **Option A: GitHub Pages (Recommended)**
 
 1. Fork this repository or upload the files to a new public repository.  
-2. Go to **Settings** \> **Pages**.  
+2. Go to **Settings** > **Pages**.  
 3. Under **Build and deployment**, select **Deploy from a branch**.  
 4. Select your main branch and click **Save**.
 
 ### **Option B: Cloudflare Pages**
 
 1. Log in to Cloudflare Dashboard.  
-2. Go to **Workers & Pages** \> **Create Application** \> **Connect to Git**.  
+2. Go to **Workers & Pages** > **Create Application** > **Connect to Git**.  
 3. Select your repository.  
 4. **Build Settings:**  
    * **Framework preset:** None  
@@ -58,4 +58,4 @@ You can host this site for free in just a few minutes.
 
 ## **License**
 
-This project is open source and available under the [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).
+This project is open source and available under the MIT License.
