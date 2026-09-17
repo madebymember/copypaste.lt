@@ -24,11 +24,10 @@ jobs:
       - name: Paruošti Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24 # Arba 'lts/*'
 
       - name: Sukompiliuoti Tailwind CSS
         run: |
-          # Įdiegiame Tailwind ir sugeneruojame minified style.css
           npx tailwindcss -i ./input.css -o ./style.css --minify
 
       - name: Paruošti GitHub Pages
