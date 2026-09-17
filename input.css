@@ -1,6 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-win-blue: #0078D7;
+  --color-win-dark: #1f1f1f;
+  --color-win-darker: #121212;
+  --color-win-light: #f3f4f6;
+}
 
 .cmd-font { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; }
 .toast {
