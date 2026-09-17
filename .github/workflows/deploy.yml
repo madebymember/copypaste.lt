@@ -27,8 +27,8 @@ jobs:
           node-version: 24 # Arba 'lts/*'
 
       - name: Sukompiliuoti Tailwind CSS
-        run: |
-          npx tailwindcss -i ./input.css -o ./style.css --minify
+  run: |
+    npx -y @tailwindcss/cli -i ./input.css -o ./style.css --minify
 
       - name: Paruošti GitHub Pages
         uses: actions/configure-pages@v5
