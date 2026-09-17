@@ -226,45 +226,48 @@
 
         // --- Rendering ---
         function render() {
-            grid.innerHTML = '';
-            
-            const filtered = commands.filter(item => {
-                const matchesCat = currentCategory === 'all' || item.cat === currentCategory;
-                const searchLower = searchQuery.toLowerCase();
-                const matchesSearch = item.cmd.toLowerCase().includes(searchLower) || 
-                                      item.desc_en.toLowerCase().includes(searchLower) || 
-                                      item.desc_lt.toLowerCase().includes(searchLower);
-                return matchesCat && matchesSearch;
-            });
+    grid.innerHTML = '';
+    
+    const filtered = commands.filter(item => {
+        const matchesCat = currentCategory === 'all' || item.cat === currentCategory;
+        const searchLower = searchQuery.toLowerCase();
+        return matchesCat && (
+            item.cmd.toLowerCase().includes(searchLower) || 
+            item.desc_en.toLowerCase().includes(searchLower) || 
+            item.desc_lt.toLowerCase().includes(searchLower)
+        );
+    });
 
-            if (filtered.length === 0) {
-                document.getElementById('noResults').classList.remove('hidden');
-            } else {
-                document.getElementById('noResults').classList.add('hidden');
-                filtered.forEach(item => {
-                    const desc = currentLang === 'lt' ? item.desc_lt : item.desc_en;
-                    const card = document.createElement('div');
-                    card.className = "bg-white dark:bg-win-dark border border-gray-200 dark:border-gray-700 rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow group flex flex-col justify-between h-full";
-                    
-                    card.innerHTML = `
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">${item.cat}</span>
-                                <i class="fas fa-terminal text-gray-300 group-hover:text-win-blue transition-colors"></i>
-                            </div>
-                            <code class="cmd-font block text-lg font-bold text-win-blue dark:text-blue-400 mb-3 break-all cursor-pointer" onclick="copyToClipboard('${item.cmd.replace(/\\/g, '\\\\')}')" title="Click to copy">${item.cmd}</code>
-                            <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">${desc}</p>
-                        </div>
-                        <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-end">
-                            <button onclick="copyToClipboard('${item.cmd.replace(/\\/g, '\\\\')}')" class="text-xs font-bold text-gray-400 hover:text-win-blue dark:hover:text-white transition-colors flex items-center gap-1">
-                                <i class="fas fa-copy"></i> COPY
-                            </button>
-                        </div>
-                    `;
-                    grid.appendChild(card);
-                });
-            }
-        }
+    const noResults = document.getElementById('noResults');
+    if (filtered.length === 0) {
+        noResults.classList.remove('hidden');
+        return;
+    }
+    noResults.classList.add('hidden');
+
+    filtered.forEach(item => {
+        const desc = currentLang === 'lt' ? item.desc_lt : item.desc_en;
+        const card = document.createElement('div');
+        card.className = "bg-white dark:bg-win-dark border border-gray-200 dark:border-gray-700 rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow group flex flex-col justify-between h-full";
+        
+        card.innerHTML = `
+            <div>
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">${item.cat}</span>
+                    <i class="fas fa-terminal text-gray-300 group-hover:text-win-blue transition-colors"></i>
+                </div>
+                <code tabindex="0" role="button" data-copy-id="${item.id}" class="cmd-font block text-lg font-bold text-win-blue dark:text-blue-400 mb-3 break-all cursor-pointer select-all focus:outline-none focus:ring-1 focus:ring-win-blue rounded" title="Click or press Enter to copy">${item.cmd}</code>
+                <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">${desc}</p>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-end">
+                <button type="button" data-copy-id="${item.id}" class="text-xs font-bold text-gray-400 hover:text-win-blue dark:hover:text-white transition-colors flex items-center gap-1">
+                    <i class="fas fa-copy"></i> COPY
+                </button>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
 
         // --- Logic ---
         function updateThemeIcon() {
