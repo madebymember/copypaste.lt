@@ -304,7 +304,40 @@
                 setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
             });
         }
+        function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
 
+function copyToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text)
+            .then(() => showToast(i18n[currentLang].toast_msg))
+            .catch(() => fallbackCopy(text));
+    } else {
+        fallbackCopy(text);
+    }
+}
+
+function fallbackCopy(text) {
+    try {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showToast(i18n[currentLang].toast_msg);
+    } catch (err) {
+        showToast("Klaida kopijuojant!");
+    }
+}
         // --- Event Listeners ---
         // Paspaudus pele
 grid.addEventListener('click', (e) => {
