@@ -26,30 +26,7 @@
     <!-- Favicon (galite naudoti paprastą SVG su Windows ar terminalo piktograma) -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💻</text></svg>">
     <link rel="stylesheet" href="./style.css">
-    <style>
-        .cmd-font { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; }
-        .toast {
-            visibility: hidden;
-            min-width: 250px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            border-radius: 4px;
-            padding: 16px;
-            position: fixed;
-            z-index: 50;
-            left: 50%;
-            bottom: 30px;
-            transform: translateX(-50%);
-            opacity: 0;
-            transition: opacity 0.3s, bottom 0.3s;
-        }
-        .toast.show {
-            visibility: visible;
-            opacity: 1;
-            bottom: 50px;
-        }
-    </style>
+    
 </head>
 <body class="bg-gray-50 text-gray-800 dark:bg-win-darker dark:text-gray-200 transition-colors duration-200">
 
@@ -306,14 +283,6 @@
             render();
         }
 
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                const msg = i18n[currentLang].toast_msg;
-                toast.textContent = msg;
-                toast.className = "toast show";
-                setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
-            });
-        }
         function showToast(message) {
     toast.textContent = message;
     toast.classList.add('show');
