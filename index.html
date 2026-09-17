@@ -1,393 +1,451 @@
 <!DOCTYPE html>
 <html lang="lt" class="scroll-smooth">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Windows Troubleshooting Cheatsheet | copypaste.lt</title>
-    
     <!-- SEO Meta Tags -->
     <meta name="description" content="Greita prieiga prie svarbiausių Windows diagnostikos, tinklo ir sistemos valdymo komandų. IT administratoriaus paruoštukė.">
     <meta name="author" content="copypaste.lt">
-
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://copypaste.lt/">
     <meta property="og:title" content="Windows Troubleshooting Cheatsheet">
     <meta property="og:description" content="Greita prieiga prie svarbiausių Windows komandų diagnostikai, tinklui ir sistemos valdymui.">
     <meta property="og:image" content="https://copypaste.lt/og-image.png">
-
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://copypaste.lt/">
     <meta property="twitter:title" content="Windows Troubleshooting Cheatsheet">
     <meta property="twitter:description" content="Greita prieiga prie svarbiausių Windows komandų diagnostikai, tinklui ir sistemos valdymui.">
     <meta property="twitter:image" content="https://copypaste.lt/og-image.png">
-
     <!-- Favicon (galite naudoti paprastą SVG su Windows ar terminalo piktograma) -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💻</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,
+																	<svg
+																		xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22>
+																		<text y=%22.9em%22 font-size=%2290%22>💻</text>
+																	</svg>">
     <link rel="stylesheet" href="./style.css">
-    
-</head>
-<body class="bg-gray-50 text-gray-800 dark:bg-win-darker dark:text-gray-200 transition-colors duration-200">
-
+  </head>
+  <body class="bg-gray-50 text-gray-800 dark:bg-win-darker dark:text-gray-200 transition-colors duration-200">
     <!-- Navbar -->
     <nav class="sticky top-0 z-40 bg-white dark:bg-win-dark shadow-md transition-colors duration-200 border-b border-gray-200 dark:border-gray-700">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center gap-3">
-                    <i class="fa-brands fa-windows text-3xl text-win-blue"></i>
-                    <h1 class="font-bold text-xl tracking-tight hidden sm:block" data-i18n="title">Windows Cheatsheet</h1>
-                </div>
-                
-                <div class="flex items-center gap-4">
-                    <!-- Search -->
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                            <i class="fas fa-search"></i>
-                        </span>
-                        <!-- Search laukelis -->
-<input type="text" id="searchInput" 
-       aria-label="Ieškoti komandų" 
-       class="bg-gray-100 dark:bg-gray-800 text-sm rounded-full pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-win-blue w-32 sm:w-64 transition-all" 
-       placeholder="Search / Ieškoti...">
-
-<!-- Kalbos mygtukas -->
-<button id="langToggle" 
-        aria-label="Keisti kalbą (Switch language)" 
-        class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-bold text-sm w-10 h-10 flex items-center justify-center border border-gray-300 dark:border-gray-600">
-    LT
-</button>
-
-<!-- Temos mygtukas -->
-<button id="themeToggle" 
-        aria-label="Keisti šviesią / tamsią temą" 
-        class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-yellow-500 dark:text-gray-400 transition-colors w-10 h-10 flex items-center justify-center">
-    <i class="fas fa-sun"></i>
-</button>
-                    
-                     <!-- Buy Me a Coffee -->
-                    <a href="https://www.buymeacoffee.com/copypastelt" target="_blank" class="hidden md:flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-3 py-1.5 rounded-full text-xs font-bold transition-colors shadow-sm">
-                        <i class="fas fa-coffee"></i> <span data-i18n="coffee">Buy Coffee</span>
-                    </a>
-                </div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+          <div class="flex items-center gap-3">
+            <i class="fa-brands fa-windows text-3xl text-win-blue"></i>
+            <h1 class="font-bold text-xl tracking-tight hidden sm:block" data-i18n="title">Windows Cheatsheet</h1>
+          </div>
+          <div class="flex items-center gap-4">
+            <!-- Search -->
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                <i class="fas fa-search"></i>
+              </span>
+              <!-- Search laukelis -->
+              <input type="text" id="searchInput" aria-label="Ieškoti komandų" class="bg-gray-100 dark:bg-gray-800 text-sm rounded-full pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-win-blue w-32 sm:w-64 transition-all" placeholder="Search / Ieškoti...">
+              <!-- Kalbos mygtukas -->
+              <button id="langToggle" aria-label="Keisti kalbą (Switch language)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-bold text-sm w-10 h-10 flex items-center justify-center border border-gray-300 dark:border-gray-600"> LT </button>
+              <!-- Temos mygtukas -->
+              <button id="themeToggle" aria-label="Keisti šviesią / tamsią temą" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-yellow-500 dark:text-gray-400 transition-colors w-10 h-10 flex items-center justify-center">
+                <i class="fas fa-sun"></i>
+              </button>
+              <!-- Buy Me a Coffee -->
+              <a href="https://www.buymeacoffee.com/copypastelt" target="_blank" class="hidden md:flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-3 py-1.5 rounded-full text-xs font-bold transition-colors shadow-sm">
+                <i class="fas fa-coffee"></i>
+                <span data-i18n="coffee">Buy Coffee</span>
+              </a>
             </div>
+          </div>
         </div>
     </nav>
-
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        <!-- Intro -->
-        <div class="text-center mb-10">
-            <h2 class="text-3xl font-extrabold mb-3" data-i18n="hero_title">IT Administratoriaus Įrankinė</h2>
-            <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto" data-i18n="hero_desc">Greita prieiga prie svarbiausių Windows komandų diagnostikai, tinklui ir sistemos valdymui.</p>
-        </div>
-
-        <!-- Filters -->
-        <div class="flex flex-wrap justify-center gap-2 mb-8" id="categoryFilters">
-            <button class="filter-btn active px-4 py-1.5 rounded-full text-sm font-medium bg-win-blue text-white shadow-sm transition-all" data-category="all" data-i18n="cat_all">Visi</button>
-            <button class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 transition-all" data-category="network" data-i18n="cat_net">Tinklas</button>
-            <button class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 transition-all" data-category="system" data-i18n="cat_sys">Sistema</button>
-            <button class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 transition-all" data-category="disk" data-i18n="cat_disk">Diskas</button>
-            <button class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 transition-all" data-category="shell" data-i18n="cat_shell">Shell & Run</button>
-        </div>
-
-        <!-- Grid -->
-        <div id="cardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Cards will be injected here via JS -->
-        </div>
-
-        <!-- No Results -->
-        <div id="noResults" class="hidden text-center py-12">
-            <div class="text-6xl mb-4">😕</div>
-            <h3 class="text-xl font-bold" data-i18n="no_results">Nerasta komandų</h3>
-            <p class="text-gray-500" data-i18n="try_search">Pabandykite kitą raktažodį.</p>
-        </div>
-
+      <!-- Intro -->
+      <div class="text-center mb-10">
+        <h2 class="text-3xl font-extrabold mb-3" data-i18n="hero_title">IT Administratoriaus Įrankinė</h2>
+        <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto" data-i18n="hero_desc">Greita prieiga prie svarbiausių Windows komandų diagnostikai, tinklui ir sistemos valdymui.</p>
+      </div>
+      <!-- Filters -->
+      <div class="flex flex-wrap justify-center gap-2 mb-8" id="categoryFilters">
+        <button class="filter-btn active px-4 py-1.5 rounded-full text-sm font-medium bg-win-blue text-white shadow-sm transition-all" data-category="all" data-i18n="cat_all">Visi</button>
+        <button class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 transition-all" data-category="network" data-i18n="cat_net">Tinklas</button>
+        <button class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 transition-all" data-category="system" data-i18n="cat_sys">Sistema</button>
+        <button class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 transition-all" data-category="disk" data-i18n="cat_disk">Diskas</button>
+        <button class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 transition-all" data-category="shell" data-i18n="cat_shell">Shell & Run</button>
+      </div>
+      <!-- Grid -->
+      <div id="cardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Cards will be injected here via JS -->
+      </div>
+      <!-- No Results -->
+      <div id="noResults" class="hidden text-center py-12">
+        <div class="text-6xl mb-4">😕</div>
+        <h3 class="text-xl font-bold" data-i18n="no_results">Nerasta komandų</h3>
+        <p class="text-gray-500" data-i18n="try_search">Pabandykite kitą raktažodį.</p>
+      </div>
     </main>
-
     <!-- Footer -->
     <footer class="bg-white dark:bg-win-dark border-t border-gray-200 dark:border-gray-700 mt-12 py-8">
-        <div class="max-w-7xl mx-auto px-4 text-center text-gray-500 dark:text-gray-400 text-sm">
-            <p>&copy; 2026 Windows Cheatsheet. Open Source Project.</p>
-        </div>
+      <div class="max-w-7xl mx-auto px-4 text-center text-gray-500 dark:text-gray-400 text-sm">
+        <p>&copy; 2026 Windows Cheatsheet. Open Source Project.</p>
+      </div>
     </footer>
-
     <!-- Toast Notification -->
     <div id="toast" class="toast">Copied to clipboard!</div>
-
     <script>
-        // --- Data ---
-        const commands = [
-            // Network
-            { id: 1, cmd: "ipconfig /all", cat: "network", desc_en: "Display full configuration information.", desc_lt: "Rodo pilną tinklo konfigūraciją (IP, MAC, DNS)." },
-            { id: 2, cmd: "ipconfig /flushdns", cat: "network", desc_en: "Clears the DNS resolver cache.", desc_lt: "Išvalo DNS sprendimų talpyklą (padeda, jei neveikia svetainės)." },
-            { id: 3, cmd: "ipconfig /release & ipconfig /renew", cat: "network", desc_en: "Refreshes your IP address.", desc_lt: "Atnaujina IP adresą iš DHCP serverio." },
-            { id: 4, cmd: "ping google.com -t", cat: "network", desc_en: "Test connectivity continuously.", desc_lt: "Nuolatinis ryšio tikrinimas su serveriu (-t parametras)." },
-            { id: 5, cmd: "netstat -an | findstr LISTEN", cat: "network", desc_en: "List open ports.", desc_lt: "Parodo visus atvirus prievadus (Ports), kurie klauso ryšio." },
-            { id: 6, cmd: "netsh wlan show profiles", cat: "network", desc_en: "List saved Wi-Fi networks.", desc_lt: "Parodo visus išsaugotus Wi-Fi tinklus." },
-            
-            // System
-            { id: 7, cmd: "sfc /scannow", cat: "system", desc_en: "Scan and repair system files.", desc_lt: "Skenuoja ir bando pataisyti sugadintus Windows sisteminius failus." },
-            { id: 8, cmd: "dism /online /cleanup-image /restorehealth", cat: "system", desc_en: "Fix Windows image corruption.", desc_lt: "Pataiso Windows atvaizdą (naudoti, jei sfc nepavyksta)." },
-            { id: 9, cmd: "systeminfo", cat: "system", desc_en: "Detailed system configuration info.", desc_lt: "Detali informacija apie sistemą (OS versija, RAM, BIOS, Hotfix)." },
-            { id: 10, cmd: "gpupdate /force", cat: "system", desc_en: "Force update group policies.", desc_lt: "Priverstinai atnaujina grupės politikas (Group Policy)." },
-            { id: 11, cmd: "shutdown /r /o /t 0", cat: "system", desc_en: "Restart into Advanced Boot Options.", desc_lt: "Perkrauna į atkūrimo meniu (Advanced Boot Options)." },
-
-            // Disk
-            { id: 12, cmd: "chkdsk C: /f /r", cat: "disk", desc_en: "Check disk for errors and bad sectors.", desc_lt: "Tikrina diską dėl klaidų ir blogų sektorių (reikalauja restarto)." },
-            { id: 13, cmd: "diskpart", cat: "disk", desc_en: "Disk partition management tool.", desc_lt: "Disko skirsnio valdymo įrankis (atsargiai!)." },
-            { id: 14, cmd: "cleanmgr", cat: "disk", desc_en: "Disk Cleanup utility.", desc_lt: "Disko valymo įrankis (pašalina temp failus)." },
-
-            // Shell / Run
-            { id: 15, cmd: "shell:AppsFolder", cat: "shell", desc_en: "Open folder with all installed apps.", desc_lt: "Atidaro aplanką su visomis įdiegtomis programomis." },
-            { id: 16, cmd: "shell:startup", cat: "shell", desc_en: "Open current user startup folder.", desc_lt: "Atidaro dabartinio vartotojo automatinio paleidimo aplanką." },
-            { id: 17, cmd: "appwiz.cpl", cat: "shell", desc_en: "Programs and Features.", desc_lt: "Atidaro 'Programs and Features' langą programų šalinimui." },
-            { id: 18, cmd: "ncpa.cpl", cat: "shell", desc_en: "Network Connections.", desc_lt: "Greitas priėjimas prie tinklo plokščių nustatymų." },
-            { id: 19, cmd: "devmgmt.msc", cat: "shell", desc_en: "Device Manager.", desc_lt: "Atidaro Įrenginių tvarkytuvę (Device Manager)." },
-            { id: 20, cmd: "lusrmgr.msc", cat: "shell", desc_en: "Local Users and Groups.", desc_lt: "Vietinių vartotojų ir grupių valdymas." }
-        ];
-
-        // --- Translations ---
-        const i18n = {
-            lt: {
-                title: "Windows Paruoštukė",
-                hero_title: "IT Administratoriaus Įrankinė",
-                hero_desc: "Greita prieiga prie svarbiausių Windows komandų diagnostikai, tinklui ir sistemos valdymui.",
-                cat_all: "Visi",
-                cat_net: "Tinklas",
-                cat_sys: "Sistema",
-                cat_disk: "Diskas",
-                cat_shell: "Vykdyti (Run)",
-                no_results: "Nerasta komandų",
-                try_search: "Pabandykite kitą raktažodį.",
-                toast_msg: "Nukopijuota!",
-                coffee: "Nupirk kavos"
-            },
-            en: {
-                title: "Windows Cheatsheet",
-                hero_title: "IT Admin Toolkit",
-                hero_desc: "Quick access to essential Windows commands for diagnostics, networking, and system management.",
-                cat_all: "All",
-                cat_net: "Network",
-                cat_sys: "System",
-                cat_disk: "Disk",
-                cat_shell: "Shell & Run",
-                no_results: "No commands found",
-                try_search: "Try a different keyword.",
-                toast_msg: "Copied to clipboard!",
-                coffee: "Buy Coffee"
-            }
-        };
-
-        // --- State ---
-        let currentLang = localStorage.getItem('lang') || 'lt'; // Default Lithuanian
-        let currentCategory = 'all';
-        let searchQuery = '';
-
-        // --- Elements ---
-        const grid = document.getElementById('cardsGrid');
-        const searchInput = document.getElementById('searchInput');
-        const langToggle = document.getElementById('langToggle');
-        const themeToggle = document.getElementById('themeToggle');
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const htmlEl = document.documentElement;
-        const toast = document.getElementById('toast');
-
-        // --- Initialization ---
-        function init() {
-            // Theme Check
-            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                htmlEl.classList.add('dark');
-            } else {
-                htmlEl.classList.remove('dark');
-            }
-            updateThemeIcon();
-            
-            // Lang Check
-            updateLangUI();
-
-            // Render
-            render();
+      // --- Data ---
+      const commands = [
+        // Network
+        {
+          id: 1,
+          cmd: "ipconfig /all",
+          cat: "network",
+          desc_en: "Display full configuration information.",
+          desc_lt: "Rodo pilną tinklo konfigūraciją (IP, MAC, DNS)."
+        }, {
+          id: 2,
+          cmd: "ipconfig /flushdns",
+          cat: "network",
+          desc_en: "Clears the DNS resolver cache.",
+          desc_lt: "Išvalo DNS sprendimų talpyklą (padeda, jei neveikia svetainės)."
+        }, {
+          id: 3,
+          cmd: "ipconfig /release & ipconfig /renew",
+          cat: "network",
+          desc_en: "Refreshes your IP address.",
+          desc_lt: "Atnaujina IP adresą iš DHCP serverio."
+        }, {
+          id: 4,
+          cmd: "ping google.com -t",
+          cat: "network",
+          desc_en: "Test connectivity continuously.",
+          desc_lt: "Nuolatinis ryšio tikrinimas su serveriu (-t parametras)."
+        }, {
+          id: 5,
+          cmd: "netstat -an | findstr LISTEN",
+          cat: "network",
+          desc_en: "List open ports.",
+          desc_lt: "Parodo visus atvirus prievadus (Ports), kurie klauso ryšio."
+        }, {
+          id: 6,
+          cmd: "netsh wlan show profiles",
+          cat: "network",
+          desc_en: "List saved Wi-Fi networks.",
+          desc_lt: "Parodo visus išsaugotus Wi-Fi tinklus."
+        },
+        // System
+        {
+          id: 7,
+          cmd: "sfc /scannow",
+          cat: "system",
+          desc_en: "Scan and repair system files.",
+          desc_lt: "Skenuoja ir bando pataisyti sugadintus Windows sisteminius failus."
+        }, {
+          id: 8,
+          cmd: "dism /online /cleanup-image /restorehealth",
+          cat: "system",
+          desc_en: "Fix Windows image corruption.",
+          desc_lt: "Pataiso Windows atvaizdą (naudoti, jei sfc nepavyksta)."
+        }, {
+          id: 9,
+          cmd: "systeminfo",
+          cat: "system",
+          desc_en: "Detailed system configuration info.",
+          desc_lt: "Detali informacija apie sistemą (OS versija, RAM, BIOS, Hotfix)."
+        }, {
+          id: 10,
+          cmd: "gpupdate /force",
+          cat: "system",
+          desc_en: "Force update group policies.",
+          desc_lt: "Priverstinai atnaujina grupės politikas (Group Policy)."
+        }, {
+          id: 11,
+          cmd: "shutdown /r /o /t 0",
+          cat: "system",
+          desc_en: "Restart into Advanced Boot Options.",
+          desc_lt: "Perkrauna į atkūrimo meniu (Advanced Boot Options)."
+        },
+        // Disk
+        {
+          id: 12,
+          cmd: "chkdsk C: /f /r",
+          cat: "disk",
+          desc_en: "Check disk for errors and bad sectors.",
+          desc_lt: "Tikrina diską dėl klaidų ir blogų sektorių (reikalauja restarto)."
+        }, {
+          id: 13,
+          cmd: "diskpart",
+          cat: "disk",
+          desc_en: "Disk partition management tool.",
+          desc_lt: "Disko skirsnio valdymo įrankis (atsargiai!)."
+        }, {
+          id: 14,
+          cmd: "cleanmgr",
+          cat: "disk",
+          desc_en: "Disk Cleanup utility.",
+          desc_lt: "Disko valymo įrankis (pašalina temp failus)."
+        },
+        // Shell / Run
+        {
+          id: 15,
+          cmd: "shell:AppsFolder",
+          cat: "shell",
+          desc_en: "Open folder with all installed apps.",
+          desc_lt: "Atidaro aplanką su visomis įdiegtomis programomis."
+        }, {
+          id: 16,
+          cmd: "shell:startup",
+          cat: "shell",
+          desc_en: "Open current user startup folder.",
+          desc_lt: "Atidaro dabartinio vartotojo automatinio paleidimo aplanką."
+        }, {
+          id: 17,
+          cmd: "appwiz.cpl",
+          cat: "shell",
+          desc_en: "Programs and Features.",
+          desc_lt: "Atidaro 'Programs and Features' langą programų šalinimui."
+        }, {
+          id: 18,
+          cmd: "ncpa.cpl",
+          cat: "shell",
+          desc_en: "Network Connections.",
+          desc_lt: "Greitas priėjimas prie tinklo plokščių nustatymų."
+        }, {
+          id: 19,
+          cmd: "devmgmt.msc",
+          cat: "shell",
+          desc_en: "Device Manager.",
+          desc_lt: "Atidaro Įrenginių tvarkytuvę (Device Manager)."
+        }, {
+          id: 20,
+          cmd: "lusrmgr.msc",
+          cat: "shell",
+          desc_en: "Local Users and Groups.",
+          desc_lt: "Vietinių vartotojų ir grupių valdymas."
         }
-
-        // --- Rendering ---
-        function render() {
-    grid.innerHTML = '';
-    
-    const filtered = commands.filter(item => {
-        const matchesCat = currentCategory === 'all' || item.cat === currentCategory;
-        const searchLower = searchQuery.toLowerCase();
-        return matchesCat && (
-            item.cmd.toLowerCase().includes(searchLower) || 
-            item.desc_en.toLowerCase().includes(searchLower) || 
-            item.desc_lt.toLowerCase().includes(searchLower)
-        );
-    });
-
-    const noResults = document.getElementById('noResults');
-    if (filtered.length === 0) {
-        noResults.classList.remove('hidden');
-        return;
-    }
-    noResults.classList.add('hidden');
-
-    filtered.forEach(item => {
-        const desc = currentLang === 'lt' ? item.desc_lt : item.desc_en;
-        const card = document.createElement('div');
-        card.className = "bg-white dark:bg-win-dark border border-gray-200 dark:border-gray-700 rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow group flex flex-col justify-between h-full";
-        
-        card.innerHTML = `
-            <div>
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">${item.cat}</span>
-                    <i class="fas fa-terminal text-gray-300 group-hover:text-win-blue transition-colors"></i>
-                </div>
-                <code tabindex="0" role="button" data-copy-id="${item.id}" class="cmd-font block text-lg font-bold text-win-blue dark:text-blue-400 mb-3 break-all cursor-pointer select-all focus:outline-none focus:ring-1 focus:ring-win-blue rounded" title="Click or press Enter to copy">${item.cmd}</code>
-                <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">${desc}</p>
-            </div>
-            <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-end">
-                <button type="button" data-copy-id="${item.id}" class="text-xs font-bold text-gray-400 hover:text-win-blue dark:hover:text-white transition-colors flex items-center gap-1">
-                    <i class="fas fa-copy"></i> COPY
-                </button>
-            </div>
+      ];
+      // --- Translations ---
+      const i18n = {
+        lt: {
+          title: "Windows Paruoštukė",
+          hero_title: "IT Administratoriaus Įrankinė",
+          hero_desc: "Greita prieiga prie svarbiausių Windows komandų diagnostikai, tinklui ir sistemos valdymui.",
+          cat_all: "Visi",
+          cat_net: "Tinklas",
+          cat_sys: "Sistema",
+          cat_disk: "Diskas",
+          cat_shell: "Vykdyti (Run)",
+          no_results: "Nerasta komandų",
+          try_search: "Pabandykite kitą raktažodį.",
+          toast_msg: "Nukopijuota!",
+          coffee: "Nupirk kavos"
+        },
+        en: {
+          title: "Windows Cheatsheet",
+          hero_title: "IT Admin Toolkit",
+          hero_desc: "Quick access to essential Windows commands for diagnostics, networking, and system management.",
+          cat_all: "All",
+          cat_net: "Network",
+          cat_sys: "System",
+          cat_disk: "Disk",
+          cat_shell: "Shell & Run",
+          no_results: "No commands found",
+          try_search: "Try a different keyword.",
+          toast_msg: "Copied to clipboard!",
+          coffee: "Buy Coffee"
+        }
+      };
+      // --- State ---
+      let currentLang = localStorage.getItem('lang') || 'lt'; // Default Lithuanian
+      let currentCategory = 'all';
+      let searchQuery = '';
+      // --- Elements ---
+      const grid = document.getElementById('cardsGrid');
+      const searchInput = document.getElementById('searchInput');
+      const langToggle = document.getElementById('langToggle');
+      const themeToggle = document.getElementById('themeToggle');
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const htmlEl = document.documentElement;
+      const toast = document.getElementById('toast');
+      // --- Initialization ---
+      function init() {
+        // Theme Check
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          htmlEl.classList.add('dark');
+        } else {
+          htmlEl.classList.remove('dark');
+        }
+        updateThemeIcon();
+        // Lang Check
+        updateLangUI();
+        // Render
+        render();
+      }
+      // --- Rendering ---
+      function render() {
+        grid.innerHTML = '';
+        const filtered = commands.filter(item => {
+          const matchesCat = currentCategory === 'all' || item.cat === currentCategory;
+          const searchLower = searchQuery.toLowerCase();
+          return matchesCat && (item.cmd.toLowerCase().includes(searchLower) || item.desc_en.toLowerCase().includes(searchLower) || item.desc_lt.toLowerCase().includes(searchLower));
+        });
+        const noResults = document.getElementById('noResults');
+        if (filtered.length === 0) {
+          noResults.classList.remove('hidden');
+          return;
+        }
+        noResults.classList.add('hidden');
+        filtered.forEach(item => {
+          const desc = currentLang === 'lt' ? item.desc_lt : item.desc_en;
+          const card = document.createElement('div');
+          card.className = "bg-white dark:bg-win-dark border border-gray-200 dark:border-gray-700 rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow group flex flex-col justify-between h-full";
+          card.innerHTML = `
+            
+																					<div>
+																						<div class="flex items-center justify-between mb-2">
+																							<span class="text-xs font-semibold uppercase tracking-wider text-gray-400">${item.cat}</span>
+																							<i class="fas fa-terminal text-gray-300 group-hover:text-win-blue transition-colors"></i>
+																						</div>
+																						<code tabindex="0" role="button" data-copy-id="${item.id}" class="cmd-font block text-lg font-bold text-win-blue dark:text-blue-400 mb-3 break-all cursor-pointer select-all focus:outline-none focus:ring-1 focus:ring-win-blue rounded" title="Click or press Enter to copy">${item.cmd}</code>
+																						<p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">${desc}</p>
+																					</div>
+																					<div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-end">
+																						<button type="button" data-copy-id="${item.id}" class="text-xs font-bold text-gray-400 hover:text-win-blue dark:hover:text-white transition-colors flex items-center gap-1">
+																							<i class="fas fa-copy"></i> COPY
+                
+																						</button>
+																					</div>
         `;
-        grid.appendChild(card);
-    });
-}
-
-        // --- Logic ---
-        function updateThemeIcon() {
-            const icon = themeToggle.querySelector('i');
-            if (htmlEl.classList.contains('dark')) {
-                icon.classList.remove('fa-sun');
-                icon.classList.add('fa-moon');
-            } else {
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-            }
+          grid.appendChild(card);
+        });
+      }
+      // --- Logic ---
+      function updateThemeIcon() {
+        const icon = themeToggle.querySelector('i');
+        if (htmlEl.classList.contains('dark')) {
+          icon.classList.remove('fa-sun');
+          icon.classList.add('fa-moon');
+        } else {
+          icon.classList.remove('fa-moon');
+          icon.classList.add('fa-sun');
         }
+      }
 
-        function updateLangUI() {
-            langToggle.textContent = currentLang.toUpperCase();
-            
-            // Update static texts
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (i18n[currentLang][key]) {
-                    el.textContent = i18n[currentLang][key];
-                }
-            });
+      function updateLangUI() {
+        langToggle.textContent = currentLang.toUpperCase();
+        // Update static texts
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          if (i18n[currentLang][key]) {
+            el.textContent = i18n[currentLang][key];
+          }
+        });
+        // Re-render cards for description language change
+        render();
+      }
 
-            // Re-render cards for description language change
-            render();
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 3000);
+      }
+
+      function copyToClipboard(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(text).then(() => showToast(i18n[currentLang].toast_msg)).catch(() => fallbackCopy(text));
+        } else {
+          fallbackCopy(text);
         }
+      }
 
-        function showToast(message) {
-    toast.textContent = message;
-    toast.classList.add('show');
-    setTimeout(() => {
-        toast.classList.remove('show');
-    }, 3000);
-}
-
-function copyToClipboard(text) {
-    if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text)
-            .then(() => showToast(i18n[currentLang].toast_msg))
-            .catch(() => fallbackCopy(text));
-    } else {
-        fallbackCopy(text);
-    }
-}
-
-function fallbackCopy(text) {
-    try {
-        const textArea = document.createElement("textarea");
-        textArea.value = text;
-        textArea.style.position = "fixed";
-        textArea.style.left = "-999999px";
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        showToast(i18n[currentLang].toast_msg);
-    } catch (err) {
-        showToast("Klaida kopijuojant!");
-    }
-}
-        // --- Event Listeners ---
-        // Paspaudus pele
-grid.addEventListener('click', (e) => {
-    const copyTarget = e.target.closest('[data-copy-id]');
-    if (copyTarget) {
-        const id = parseInt(copyTarget.dataset.copyId, 10);
-        const command = commands.find(c => c.id === id);
-        if (command) copyToClipboard(command.cmd);
-    }
-});
-
-// Valdymas klaviatūra (Enter / Space)
-grid.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
+      function fallbackCopy(text) {
+        try {
+          const textArea = document.createElement("textarea");
+          textArea.value = text;
+          textArea.style.position = "fixed";
+          textArea.style.left = "-999999px";
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+          showToast(i18n[currentLang].toast_msg);
+        } catch (err) {
+          showToast("Klaida kopijuojant!");
+        }
+      }
+      // --- Event Listeners ---
+      // Paspaudus pele
+      grid.addEventListener('click', (e) => {
         const copyTarget = e.target.closest('[data-copy-id]');
         if (copyTarget) {
+          const id = parseInt(copyTarget.dataset.copyId, 10);
+          const command = commands.find(c => c.id === id);
+          if (command) copyToClipboard(command.cmd);
+        }
+      });
+      // Valdymas klaviatūra (Enter / Space)
+      grid.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          const copyTarget = e.target.closest('[data-copy-id]');
+          if (copyTarget) {
             e.preventDefault();
             const id = parseInt(copyTarget.dataset.copyId, 10);
             const command = commands.find(c => c.id === id);
             if (command) copyToClipboard(command.cmd);
+          }
         }
-    }
-});
-        // Search
-        searchInput.addEventListener('input', (e) => {
-            searchQuery = e.target.value;
-            render();
+      });
+      // Search
+      searchInput.addEventListener('input', (e) => {
+        searchQuery = e.target.value;
+        render();
+      });
+      // Filter Buttons
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => {
+            b.classList.remove('bg-win-blue', 'text-white');
+            b.classList.add('bg-white', 'dark:bg-gray-800', 'text-gray-800', 'dark:text-gray-200');
+          });
+          btn.classList.remove('bg-white', 'dark:bg-gray-800', 'text-gray-800', 'dark:text-gray-200');
+          btn.classList.add('bg-win-blue', 'text-white');
+          currentCategory = btn.getAttribute('data-category');
+          render();
         });
-
-        // Filter Buttons
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => {
-                    b.classList.remove('bg-win-blue', 'text-white');
-                    b.classList.add('bg-white', 'dark:bg-gray-800', 'text-gray-800', 'dark:text-gray-200');
-                });
-                btn.classList.remove('bg-white', 'dark:bg-gray-800', 'text-gray-800', 'dark:text-gray-200');
-                btn.classList.add('bg-win-blue', 'text-white');
-                currentCategory = btn.getAttribute('data-category');
-                render();
-            });
-        });
-
-        // Toggle Language
-        langToggle.addEventListener('click', () => {
-            currentLang = currentLang === 'lt' ? 'en' : 'lt';
-            localStorage.setItem('lang', currentLang);
-            updateLangUI();
-        });
-
-        // Toggle Theme
-        themeToggle.addEventListener('click', () => {
-            if (htmlEl.classList.contains('dark')) {
-                htmlEl.classList.remove('dark');
-                localStorage.theme = 'light';
-            } else {
-                htmlEl.classList.add('dark');
-                localStorage.theme = 'dark';
-            }
-            updateThemeIcon();
-        });
-
-        // Start
-        init();
-
+      });
+      // Toggle Language
+      langToggle.addEventListener('click', () => {
+        currentLang = currentLang === 'lt' ? 'en' : 'lt';
+        localStorage.setItem('lang', currentLang);
+        updateLangUI();
+      });
+      // Toggle Theme
+      themeToggle.addEventListener('click', () => {
+        if (htmlEl.classList.contains('dark')) {
+          htmlEl.classList.remove('dark');
+          localStorage.theme = 'light';
+        } else {
+          htmlEl.classList.add('dark');
+          localStorage.theme = 'dark';
+        }
+        updateThemeIcon();
+      });
+      // Start
+      init();
     </script>
     <!-- Privacy-friendly analytics by Plausible -->
     <script async src="https://plausible.io/js/pa-QDl2e_cQKFdNIspNKaFop.js"></script>
     <script>
-      window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      window.plausible = window.plausible || function() {
+        (plausible.q = plausible.q || []).push(arguments)
+      }, plausible.init = plausible.init || function(i) {
+        plausible.o = i || {}
+      };
       plausible.init()
     </script>
-</body>
+  </body>
 </html>
