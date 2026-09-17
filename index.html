@@ -306,7 +306,28 @@
         }
 
         // --- Event Listeners ---
-        
+        // Paspaudus pele
+grid.addEventListener('click', (e) => {
+    const copyTarget = e.target.closest('[data-copy-id]');
+    if (copyTarget) {
+        const id = parseInt(copyTarget.dataset.copyId, 10);
+        const command = commands.find(c => c.id === id);
+        if (command) copyToClipboard(command.cmd);
+    }
+});
+
+// Valdymas klaviatūra (Enter / Space)
+grid.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+        const copyTarget = e.target.closest('[data-copy-id]');
+        if (copyTarget) {
+            e.preventDefault();
+            const id = parseInt(copyTarget.dataset.copyId, 10);
+            const command = commands.find(c => c.id === id);
+            if (command) copyToClipboard(command.cmd);
+        }
+    }
+});
         // Search
         searchInput.addEventListener('input', (e) => {
             searchQuery = e.target.value;
