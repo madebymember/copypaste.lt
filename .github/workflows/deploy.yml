@@ -28,7 +28,7 @@ jobs:
 
       - name: Sukompiliuoti Tailwind CSS
         run: |
-          npx -y tailwindcss@3 -i ./input.css -o ./style.css --minify
+          npx -y @tailwindcss/cli -i ./input.css -o ./style.css --minify
 
       - name: Paruošti GitHub Pages
         uses: actions/configure-pages@v5
