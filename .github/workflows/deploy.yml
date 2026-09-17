@@ -1,0 +1,44 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: ["main"] # Arba 'master', priklausomai nuo pagrindinės šakos pavadinimo
+  workflow_dispatch:   # Leidžia paleisti procesą rankiniu būdu per GitHub svetainę
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout kodas
+        uses: actions/checkout@v4
+
+      - name: Paruošti Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Sukompiliuoti Tailwind CSS
+        run: |
+          # Įdiegiame Tailwind ir sugeneruojame minified style.css
+          npx tailwindcss -i ./input.css -o ./style.css --minify
+
+      - name: Paruošti GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Įkelti tinklalapio failus
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.' # Įkelia visus šakninius failus (index.html, style.css, CNAME ir kt.)
+
+      - name: Publikuoti į GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
